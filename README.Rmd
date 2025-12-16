@@ -16,6 +16,8 @@ output: github_document
 # kcPopsci
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/kchd-ophs/kcPopsci/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kchd-ophs/kcPopsci/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/kchd-ophs/kcPopsci/graph/badge.svg)](https://app.codecov.io/gh/kchd-ophs/kcPopsci)
 <!-- badges: end -->
 
 The goal of kcPopsci is to ...

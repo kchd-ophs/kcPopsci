@@ -4,3 +4,6 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.github$
+^codecov\.yml$
+^LICENSE\.md$
