@@ -20,7 +20,7 @@
 make_age_bins <- function(ages,width=10) {
 
   if(!width %in% c(5,10)){
-    error("Width must be equal to either 5 or 10")
+    stop("Width must be equal to either 5 or 10")
   }
 
   breaks <- c(0,1,seq(5,85,width),Inf)
