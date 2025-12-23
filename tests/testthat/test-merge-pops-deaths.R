@@ -1,29 +1,28 @@
 test_that("uneven row counts caught", {
-  library(dplyr)
   set.seed(1)
   ab <- c("0-1","1-4","5-14","15-24","25-34","35-44",
           "45-54","55-64","65-74","75-84","85+")
   age_bins <- factor(ab,levels=ab)
 
-  pops <- tibble(ages=age_bins[0:-1],
+  pops <- dplyr::tibble(ages=age_bins[0:-1],
                  p=sample(20:300,length(age_bins)-1))
-  deaths <- tibble(ages=age_bins,
+  deaths <- dplyr::tibble(ages=age_bins,
                    d=sample(2:30,length(age_bins)))
 
   expect_error(merge_pop_deaths(pops,deaths))
 })
 
 test_that("unexpected col counts caught", {
-  library(dplyr)
+
   set.seed(1)
   ab <- c("0-1","1-4","5-14","15-24","25-34","35-44",
           "45-54","55-64","65-74","75-84","85+")
   age_bins <- factor(ab,levels=ab)
 
-  pops <- tibble(ages=age_bins,
+  pops <- dplyr::tibble(ages=age_bins,
                  p=sample(20:300,length(age_bins)))
 
-  deaths <- tibble(ages=age_bins,
+  deaths <- dplyr::tibble(ages=age_bins,
                    d=sample(2:30,length(age_bins)),
                    e=LETTERS[1:length(age_bins)])
 
@@ -31,7 +30,7 @@ test_that("unexpected col counts caught", {
 })
 
 test_that("merge provides expected output", {
-  library(dplyr)
+
   set.seed(1)
   ab <- c("0-1","1-4","5-14","15-24","25-34","35-44",
           "45-54","55-64","65-74","75-84","85+")
@@ -42,14 +41,14 @@ test_that("merge provides expected output", {
   pv <- rnorm(length(age_bins))
   d <- sample(2:30,length(age_bins))
 
-  pops <- tibble(ages=age_bins,
+  pops <- dplyr::tibble(ages=age_bins,
                  p=p,
                  pv=pv)
-  deaths <- tibble(ages=age_bins,
+  deaths <- dplyr::tibble(ages=age_bins,
                    d=d)
 
   act <- merge_pop_deaths(pops,deaths)
-  exp <- tibble(age_bin=age_bins,
+  exp <- dplyr::tibble(age_bin=age_bins,
                 population=p,
                 population_var=pv,
                 deaths=d)

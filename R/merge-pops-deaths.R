@@ -15,10 +15,8 @@
 #' The first row should be the age bin from 0-1. Age bins must be identical
 #' to those in deaths.
 #' @returns A data frame/data frame extension (e.g. a tibble)
-#' @export
 #'
 #' @examples
-#'  require(dplyr)
 #'  ab <- c("0-1","1-4","5-14","15-24","25-34","35-44",
 #'  "45-54","55-64","65-74","75-84","85+")
 #'  age_bins <- factor(ab,levels=ab)
@@ -26,14 +24,13 @@
 #'  pv <- rnorm(length(age_bins))
 #'  d <- sample(2:30,length(age_bins))
 #'
-#'  pops <- tibble(ages=age_bins, p=p, pv=pv)
-#'  deaths <- tibble(ages=age_bins, d=d)
+#'  pops <- dplyr::tibble(ages=age_bins, p=p, pv=pv)
+#'  deaths <- dplyr::tibble(ages=age_bins, d=d)
 #'  merge_pop_deaths(pops,deaths)
 #'
 
 
 merge_pop_deaths <- function(pops,deaths) {
-  requireNamespace("dplyr", quietly = TRUE)
 
   if(nrow(deaths)!=nrow(pops)){
     stop("Both deaths and pops should have the same number of rows")
@@ -57,7 +54,7 @@ merge_pop_deaths <- function(pops,deaths) {
     stop("Age bin names in deaths and pops must be identical")
   }
 
-  dplyr::inner_join(pops,deaths)
+  dplyr::inner_join(pops,deaths,by = "age_bin")
 
 }
 
