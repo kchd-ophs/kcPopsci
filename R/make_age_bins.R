@@ -12,7 +12,9 @@
 #' @export
 #'
 #' @examples
-#' make_age_bins(5)
+#' set.seed(0)
+#' ages <- sample(0:100,10)
+#' make_age_bins(ages,10)
 #'
 
 make_age_bins <- function(ages,width=10) {
