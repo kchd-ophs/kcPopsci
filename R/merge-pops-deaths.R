@@ -8,12 +8,18 @@
 #' that they can be used for life table calculation.
 #'
 #' @param deaths A 2 column data frame/ data frame extension (e.g. a tibble),
-#' with a column indicating age bins and a column indicating death counts. The
+#' with a column indicating age bins ("age_bin") and a column indicating death counts. The
 #' first row should be the age bin from 0-1.
 #' @param pops A 2 column data frame/ data frame extension (e.g. a tibble),
-#' with a column indicating age bins and a column indicating population counts.
+#' with a column indicating age bins ("age_bin") and a column indicating population counts.
 #' The first row should be the age bin from 0-1. Age bins must be identical
 #' to those in deaths.
+#' @param age_bin_col Character indicating the name of the column with age bins
+#' @param by A vector with the names of the grouping columns to merge by.
+#' Argument does not need to include age_bin. If empty, no grouping variables will
+#' be assumed.
+#'
+#' @export
 #' @returns A data frame/data frame extension (e.g. a tibble)
 #'
 #' @examples
@@ -26,35 +32,37 @@
 #'
 #'  pops <- dplyr::tibble(ages=age_bins, p=p, pv=pv)
 #'  deaths <- dplyr::tibble(ages=age_bins, d=d)
-#'  merge_pop_deaths(pops,deaths)
+#'  merge_pop_deaths(pops,deaths,age_bin_col="ages")
 #'
 
 
-merge_pop_deaths <- function(pops,deaths) {
+merge_pop_deaths <- function(pops,deaths,age_bin_col="age_bin",by=NULL) {
+
+  # confirm age_bin_col present in both pops and deaths
+  if(!age_bin_col %in% names(pops) | !age_bin_col %in% names(pops)){
+    stop("The age_bin_col must be present in both pops and deaths.")
+  }
+
+  # rename age_bin_col if necessary
+  if (age_bin_col!="age_bin"){
+    names(pops)[names(pops)==age_bin_col] <- "age_bin"
+    names(deaths)[names(deaths)==age_bin_col] <- "age_bin"
+  }
+
+  # set merge variables
+  if(is.null(by)) {
+    by <- "age_bin"
+  } else {
+    by <- c("age_bin",by)
+  }
 
   if(nrow(deaths)!=nrow(pops)){
     stop("Both deaths and pops should have the same number of rows")
-  }
-
-  if(ncol(deaths)!=2 | !ncol(pops) %in% c(2,3)){
-    stop("Deaths must have exactly two columns. Pops must have two or three
-         columns.")
-  }
-
-  colnames(pops)[1] <- "age_bin"
-  colnames(deaths)[1] <- "age_bin"
-  colnames(pops)[2] <- "population"
-  colnames(deaths)[2] <- "deaths"
-  if(ncol(pops)==3){
-    colnames(pops)[3] <- "population_var"
-
   }
 
   if (!identical(deaths$age_bin,pops$age_bin)){
     stop("Age bin names in deaths and pops must be identical")
   }
 
-  dplyr::inner_join(pops,deaths,by = "age_bin")
-
+  dplyr::inner_join(pops,deaths,by = by)
 }
-

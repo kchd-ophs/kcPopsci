@@ -4,17 +4,23 @@
 \alias{merge_pop_deaths}
 \title{Merge population and deaths by age bin}
 \usage{
-merge_pop_deaths(pops, deaths)
+merge_pop_deaths(pops, deaths, age_bin_col = "age_bin", by = NULL)
 }
 \arguments{
 \item{pops}{A 2 column data frame/ data frame extension (e.g. a tibble),
-with a column indicating age bins and a column indicating population counts.
+with a column indicating age bins ("age_bin") and a column indicating population counts.
 The first row should be the age bin from 0-1. Age bins must be identical
 to those in deaths.}
 
 \item{deaths}{A 2 column data frame/ data frame extension (e.g. a tibble),
-with a column indicating age bins and a column indicating death counts. The
+with a column indicating age bins ("age_bin") and a column indicating death counts. The
 first row should be the age bin from 0-1.}
+
+\item{age_bin_col}{Character indicating the name of the column with age bins}
+
+\item{by}{A vector with the names of the grouping columns to merge by.
+Argument does not need to include age_bin. If empty, no grouping variables will
+be assumed.}
 }
 \value{
 A data frame/data frame extension (e.g. a tibble)
@@ -36,6 +42,6 @@ that they can be used for life table calculation.
 
  pops <- dplyr::tibble(ages=age_bins, p=p, pv=pv)
  deaths <- dplyr::tibble(ages=age_bins, d=d)
- merge_pop_deaths(pops,deaths)
+ merge_pop_deaths(pops,deaths,age_bin_col="ages")
 
 }
