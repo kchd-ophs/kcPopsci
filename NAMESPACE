@@ -2,6 +2,7 @@
 
 export(calc_mortality_rate)
 export(check_eligibility)
+export(life_table_prep)
 export(make_age_bins)
 export(merge_pop_deaths)
 import(dplyr)

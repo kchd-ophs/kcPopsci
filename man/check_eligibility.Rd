@@ -9,8 +9,8 @@ check_eligibility(
   group_vars = NULL,
   population = "population",
   deaths = "deaths",
-  death_threshhold = 20,
-  pop_threshhold = 4000
+  pop_threshhold = 4000,
+  death_threshhold = 20
 )
 }
 \arguments{
@@ -24,11 +24,11 @@ first row should be the age bin from 0-1.}
 
 \item{deaths}{Character indicating the column name with population sizes}
 
-\item{death_threshhold}{Minimum number of deaths in (sub)population to
-be used for LE estimation}
-
 \item{pop_threshhold}{Minimum populationXyears size in (sub)population to
-be used for LE estimation}
+be used for LE estimation. Default is 4,000}
+
+\item{death_threshhold}{Minimum number of deaths in (sub)population to
+be used for LE estimation. Default is 20}
 }
 \value{
 A data frame/data frame extension (e.g. a tibble) with flags for

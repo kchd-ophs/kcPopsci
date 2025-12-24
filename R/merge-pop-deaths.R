@@ -56,10 +56,12 @@ merge_pop_deaths <- function(pops,deaths,age_bin_col="age_bin",by=NULL) {
     by <- c("age_bin",by)
   }
 
+  # check row counts
   if(nrow(deaths)!=nrow(pops)){
     stop("Both deaths and pops should have the same number of rows")
   }
 
+  # check age bin names
   if (!identical(deaths$age_bin,pops$age_bin)){
     stop("Age bin names in deaths and pops must be identical")
   }
