@@ -29,7 +29,7 @@ make_age_bins <- function(ages,width=10) {
   labels[1] <- "0-1"
   labels[length(labels)] <- "85+"
 
-  cut(ages, breaks=breaks, labels=labels,
+  cut(ages, breaks=breaks, labels=labels, right = FALSE,
       include.lowest = TRUE,ordered_result = TRUE)
 }
 
