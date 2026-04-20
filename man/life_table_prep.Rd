@@ -40,7 +40,8 @@ be assumed.}
 expectancy calculations will be dropped, as will the columns indicating eligibility}
 
 \item{pop_threshhold}{Minimum populationXyears size in (sub)population to
-be used for LE estimation. Default is 4,000}
+be used for LE estimation. Default is 4,000
+s}
 
 \item{death_threshhold}{Minimum number of deaths in (sub)population to
 be used for LE estimation. Default is 20}
@@ -54,7 +55,7 @@ Merges dataframes of death and population counts, plus checks for any
 ineligible subgroups
 }
 \examples{
- set.seed(1)
+set.seed(1)
 ab <- c("0-1","1-4","5-14","15-24","25-34","35-44",
        "45-54","55-64","65-74","75-84","85+")
 age_bins <- factor(ab,levels=ab)

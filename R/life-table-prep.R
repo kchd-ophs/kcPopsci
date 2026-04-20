@@ -24,13 +24,13 @@
 #' be used for LE estimation. Default is 20
 #' @param pop_threshhold Minimum populationXyears size in (sub)population to
 #' be used for LE estimation. Default is 4,000
-#'
+#'s
 #' @export
 #' @returns A data frame/data frame extension (e.g. a tibble) that can be used
 #' to calculate a life table
 #'
 #' @examples
-#'  set.seed(1)
+#'set.seed(1)
 #'ab <- c("0-1","1-4","5-14","15-24","25-34","35-44",
 #'        "45-54","55-64","65-74","75-84","85+")
 #'age_bins <- factor(ab,levels=ab)
