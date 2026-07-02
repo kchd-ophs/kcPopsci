@@ -24,7 +24,8 @@
 #' be used for LE estimation. Default is 20
 #' @param pop_threshhold Minimum populationXyears size in (sub)population to
 #' be used for LE estimation. Default is 4,000
-#'s
+#' @param ... arguments passed to merge_pop_deaths()
+#'
 #' @export
 #' @returns A data frame/data frame extension (e.g. a tibble) that can be used
 #' to calculate a life table
@@ -46,7 +47,8 @@
 #'                      age_bin_col="ages",
 #'                      population_col="p",
 #'                      deaths_col="d",
-#'                      drop_inelig = FALSE)
+#'                      drop_inelig = FALSE
+#'                      )
 
 
 life_table_prep <- function(pops,
@@ -57,7 +59,8 @@ life_table_prep <- function(pops,
                             group_vars=NULL,
                             drop_inelig=TRUE,
                             pop_threshhold=4000,
-                            death_threshhold=20
+                            death_threshhold=20,
+                            ...
                             ) {
 
   if (is.null(group_vars)){
@@ -66,7 +69,9 @@ life_table_prep <- function(pops,
   df_orig <- merge_pop_deaths(pops=pops,
                          deaths=deaths,
                          age_bin_col=age_bin_col,
-                         by=group_vars)
+                         by=group_vars,
+                         ...
+                         )
 
   df_elig <- check_eligibility(df=df_orig,group_vars=group_vars,
                       population=population_col,
