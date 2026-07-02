@@ -13,7 +13,8 @@ life_table_prep(
   group_vars = NULL,
   drop_inelig = TRUE,
   pop_threshhold = 4000,
-  death_threshhold = 20
+  death_threshhold = 20,
+  ...
 )
 }
 \arguments{
@@ -40,11 +41,12 @@ be assumed.}
 expectancy calculations will be dropped, as will the columns indicating eligibility}
 
 \item{pop_threshhold}{Minimum populationXyears size in (sub)population to
-be used for LE estimation. Default is 4,000
-s}
+be used for LE estimation. Default is 4,000}
 
 \item{death_threshhold}{Minimum number of deaths in (sub)population to
 be used for LE estimation. Default is 20}
+
+\item{...}{arguments passed to merge_pop_deaths()}
 }
 \value{
 A data frame/data frame extension (e.g. a tibble) that can be used
@@ -69,5 +71,6 @@ lt <- life_table_prep(pops,
                      age_bin_col="ages",
                      population_col="p",
                      deaths_col="d",
-                     drop_inelig = FALSE)
+                     drop_inelig = FALSE
+                     )
 }

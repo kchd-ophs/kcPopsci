@@ -4,7 +4,13 @@
 \alias{merge_pop_deaths}
 \title{Merge population and deaths by age bin}
 \usage{
-merge_pop_deaths(pops, deaths, age_bin_col = "age_bin", by = NULL)
+merge_pop_deaths(
+  pops,
+  deaths,
+  age_bin_col = "age_bin",
+  by = NULL,
+  strict = TRUE
+)
 }
 \arguments{
 \item{pops}{A 2 column data frame/ data frame extension (e.g. a tibble),
@@ -21,6 +27,10 @@ first row should be the age bin from 0-1.}
 \item{by}{A vector with the names of the grouping columns to merge by.
 Argument does not need to include age_bin. If empty, no grouping variables will
 be assumed.}
+
+\item{strict}{A logical value. If TRUE (the default), returns an error if
+certain assumptions about deaths and pops are not met. Otherwise, returns
+a warning.}
 }
 \value{
 A data frame/data frame extension (e.g. a tibble)

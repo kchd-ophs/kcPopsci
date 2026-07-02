@@ -18,6 +18,9 @@
 #' @param by A vector with the names of the grouping columns to merge by.
 #' Argument does not need to include age_bin. If empty, no grouping variables will
 #' be assumed.
+#' @param strict A logical value. If TRUE (the default), returns an error if
+#' certain assumptions about deaths and pops are not met. Otherwise, returns
+#' a warning.
 #'
 #' @export
 #' @returns A data frame/data frame extension (e.g. a tibble)
@@ -36,35 +39,41 @@
 #'
 
 
-merge_pop_deaths <- function(pops,deaths,age_bin_col="age_bin",by=NULL) {
+merge_pop_deaths <- function(pops,deaths,age_bin_col="age_bin",
+                             by=NULL,strict=TRUE) {
 
-  # confirm age_bin_col present in both pops and deaths
-  if(!age_bin_col %in% names(pops) | !age_bin_col %in% names(pops)){
-    stop("The age_bin_col must be present in both pops and deaths.")
+  if (!age_bin_col %in% names(pops) | !age_bin_col %in% names(pops)) {
+    if(strict){
+      stop("The age_bin_col must be present in both pops and deaths.")
+    } else{
+      warning("The age_bin_col is not present in both pops and deaths.")
+    }
   }
-
-  # rename age_bin_col if necessary
-  if (age_bin_col!="age_bin"){
-    names(pops)[names(pops)==age_bin_col] <- "age_bin"
-    names(deaths)[names(deaths)==age_bin_col] <- "age_bin"
+  if (age_bin_col != "age_bin") {
+    names(pops)[names(pops) == age_bin_col] <- "age_bin"
+    names(deaths)[names(deaths) == age_bin_col] <- "age_bin"
   }
-
-  # set merge variables
-  if(is.null(by)) {
+  if (is.null(by)) {
     by <- "age_bin"
-  } else {
-    by <- c("age_bin",by)
   }
-
-  # check row counts
-  if(nrow(deaths)!=nrow(pops)){
-    stop("Both deaths and pops should have the same number of rows")
+  else {
+    by <- c("age_bin", by)
   }
-
-  # check age bin names
-  if (!identical(deaths$age_bin,pops$age_bin)){
-    stop("Age bin names in deaths and pops must be identical")
+  if (nrow(deaths) != nrow(pops)) {
+    if(strict){
+      stop("Both deaths and pops should have the same number of rows")
+    } else{
+      warning("Deaths and pops do not have the same number of rows")
+    }
   }
-
-  dplyr::inner_join(pops,deaths,by = by)
+  if (!identical(deaths$age_bin, pops$age_bin)) {
+    if(strict){
+      stop("Age bin names in deaths and pops must be identical")
+    } else{
+      warning("Age bin names in deaths and pops are not identical")
+    }
+  }
+  dplyr::inner_join(pops, deaths, by = by) |>
+    mutate(across(where(is.numeric), ~replace_na(., 0)))
 }
+
