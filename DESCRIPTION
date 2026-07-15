@@ -1,22 +1,30 @@
 Package: kcPopsci
-Title: What the Package Does (One Line, Title Case)
+Title: Tools for OPHS Analyses
 Version: 0.0.0.9000
 Authors@R: c(
     person("Eliot", "Monaco", , "eliotmonaco@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5982-5854")),
     person("Dylan", "Knaggs", , "dylan.knaggs@gmail.com", role = c("aut"))
   )
-Description: What the package does (one paragraph).
+Description: This package includes functions for calculating life expectancy,
+    accessing and visualizing ESSENCE data, and more.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Suggests: 
+    highcharter,
+    htmlwidgets,
+    readr,
+    Rnssp,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
     dplyr,
+    rlang,
     tidyr
+Remotes:
+    CDCgov/Rnssp
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1)
 LazyData: true
+Config/roxygen2/version: 8.0.0

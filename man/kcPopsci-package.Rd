@@ -4,15 +4,16 @@
 \name{kcPopsci-package}
 \alias{kcPopsci}
 \alias{kcPopsci-package}
-\title{kcPopsci: What the Package Does (One Line, Title Case)}
+\title{kcPopsci: Tools for OPHS Analyses}
 \description{
-What the package does (one paragraph).
+This package includes functions for calculating life expectancy, accessing and visualizing ESSENCE data, and more.
 }
 \author{
 \strong{Maintainer}: Eliot Monaco \email{eliotmonaco@gmail.com} (\href{https://orcid.org/0000-0002-5982-5854}{ORCID})
 
 Authors:
 \itemize{
+  \item Eliot Monaco \email{eliotmonaco@gmail.com} (\href{https://orcid.org/0000-0002-5982-5854}{ORCID})
   \item Dylan Knaggs \email{dylan.knaggs@gmail.com}
 }
 
