@@ -35,7 +35,8 @@
 #'   syndrome = syn,
 #'   start = Sys.Date() - 30,
 #'   data_source = "hospital",
-#'   output = "ts"
+#'   output = "ts",
+#'   regions = c("Cass", "Clay", "Jackson", "Platte")
 #' )
 #'
 #' load("path/to/myProfile.rda")

@@ -13,7 +13,8 @@ test_that("ts, hospital", {
     start = date - 30,
     end = date,
     data_source = "hospital",
-    output = "ts"
+    output = "ts",
+    regions = c("Cass", "Clay", "Jackson", "Platte")
   )
 
   exp <- paste(
@@ -58,7 +59,8 @@ test_that("ts, patient", {
     start = date - 30,
     end = date,
     data_source = "patient",
-    output = "ts"
+    output = "ts",
+    regions = c("Cass", "Clay")
   )
 
   exp <- paste(
@@ -69,8 +71,6 @@ test_that("ts, patient", {
       "geographySystem=region",
       "geography=mo_cass",
       "geography=mo_clay",
-      "geography=mo_jackson",
-      "geography=mo_platte",
       "userId=1234",
       "startDate=01Jun2026",
       "endDate=01Jul2026",
@@ -146,7 +146,8 @@ test_that("dd, hospital, `dd_fields` is NULL", {
     start = date - 30,
     end = date,
     data_source = "hospital",
-    output = "dd"
+    output = "dd",
+    regions = c("Jackson", "Platte")
   )
 
   exp <- paste(
@@ -155,8 +156,6 @@ test_that("dd, hospital, `dd_fields` is NULL", {
       "aqtTarget=DataDetails",
       "datasource=va_hosp",
       "geographySystem=hospitalregion",
-      "geography=mo_cass",
-      "geography=mo_clay",
       "geography=mo_jackson",
       "geography=mo_platte",
       "userId=1234",
@@ -192,6 +191,7 @@ test_that("dd, hospital, `dd_fields` is populated", {
     end = date,
     data_source = "hospital",
     output = "dd",
+    regions = c("Cass", "Clay", "Jackson", "Platte"),
     dd_fields = c("Date", "HospitalName", "HasBeenE")
   )
 
@@ -224,4 +224,46 @@ test_that("dd, hospital, `dd_fields` is populated", {
   )
 
   expect_equal(act, exp)
+})
+
+test_that("error: hospital + zipcodes", {
+  expect_error(
+    ess_build_url(
+      user_id = 1234,
+      syndrome = "syndrome",
+      start = Sys.Date() - 30,
+      data_source = "hospital",
+      output = "dd",
+      zipcodes = "64108"
+    ),
+    "`zipcodes` can only be used when `data_source = \"patient\"`"
+  )
+})
+
+test_that("error: regions + zipcodes", {
+  expect_error(
+    ess_build_url(
+      user_id = 1234,
+      syndrome = "syndrome",
+      start = Sys.Date() - 30,
+      data_source = "patient",
+      output = "dd",
+      regions = "Jackson",
+      zipcodes = "64105"
+    ),
+    "Either `regions` or `zipcodes` must be populated, but not both"
+  )
+})
+
+test_that("error: no regions or zipcodes", {
+  expect_error(
+    ess_build_url(
+      user_id = 1234,
+      syndrome = "syndrome",
+      start = Sys.Date() - 30,
+      data_source = "patient",
+      output = "dd"
+    ),
+    "Either `regions` or `zipcodes` must be populated, but not both"
+  )
 })

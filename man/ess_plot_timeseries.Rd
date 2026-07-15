@@ -16,8 +16,8 @@ An object of classes "highchart" and "htmlwidget".
 }
 \description{
 This function configures and plots a time series using the highcharter
-package. The output is an interactive plot with alerts and tooltips that
-mimic the time series plot within the ESSENCE software.#'
+package. The output is an interactive plot with alerts and tooltips, similar
+to the time series plots created within the ESSENCE system.
 }
 \section{Rnssp package}{
 
@@ -39,6 +39,7 @@ ess_plot_timeseries(my_ts, title = "My tremendous time series")
 \seealso{
 Other essence helpers:
 \code{\link[=ess_build_url]{ess_build_url()}},
+\code{\link{ess_dd_vars}},
 \code{\link[=ess_get_data]{ess_get_data()}}
 }
 \concept{essence helpers}

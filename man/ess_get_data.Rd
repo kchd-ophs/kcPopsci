@@ -45,7 +45,8 @@ url <- ess_build_url(
   syndrome = syn,
   start = Sys.Date() - 30,
   data_source = "hospital",
-  output = "ts"
+  output = "ts",
+  regions = c("Cass", "Clay", "Jackson", "Platte")
 )
 
 load("path/to/myProfile.rda")
@@ -58,6 +59,7 @@ df <- ess_get_data(url)
 \seealso{
 Other essence helpers:
 \code{\link[=ess_build_url]{ess_build_url()}},
+\code{\link{ess_dd_vars}},
 \code{\link[=ess_plot_timeseries]{ess_plot_timeseries()}}
 }
 \concept{essence helpers}

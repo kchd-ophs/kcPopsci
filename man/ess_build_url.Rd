@@ -11,8 +11,9 @@ ess_build_url(
   end = Sys.Date(),
   data_source = c("hospital", "patient"),
   output = c("dd", "ts"),
-  dd_fields = NULL,
-  zipcodes = NULL
+  regions = NULL,
+  zipcodes = NULL,
+  dd_fields = NULL
 )
 }
 \arguments{
@@ -30,30 +31,40 @@ defaults to \code{Sys.Date()}.}
 
 \item{output}{Either \code{"dd"} (for data details) or \code{"ts"} (for time series).}
 
-\item{dd_fields}{A vector of data details fields to pull. \code{NULL} returns all
-available fields. If not \code{NULL}, "EssenceID" is added to prevent aggregation
-of data.}
+\item{regions}{A vector of county names (case insensitive; omit the word
+"county").}
 
 \item{zipcodes}{A vector of ZIP codes (numeric or character). Only used if
 \code{data_source = "patient"}.}
+
+\item{dd_fields}{A vector of data details fields to pull. \code{NULL} returns all
+available fields. If not \code{NULL}, "EssenceID" is added to prevent aggregation
+of data.}
 }
 \value{
 A dataframe.
 }
 \description{
 This function creates a URL (or a vector of URLs) to query the API for
-Missouri's ESSENCE system provided by InductiveHealth.
+Missouri's InductiveHealth ESSENCE system.
 }
 \details{
-Geography for the query is determined as follows.
-\itemize{
-\item If \code{data_source = "hospital"}, records from all hospitals in Cass, Clay,
-Jackson, and Platte counties will be downloaded.
-\item If \code{data_source = "patient"} and \code{zipcodes = NULL}, records for all
-patients with ZIP codes in Cass, Clay, Jackson, and Platte counties will be
-downloaded.
-\item If \code{data_source = "patient"} and \code{zipcodes} is not \code{NULL}, records for
-only those patients with ZIP codes provided will be downloaded.
+\subsection{Geography}{
+
+Only one of \code{regions} or \code{zipcodes} should be populated. \code{zipcodes} can only
+be used if \code{data_source = "patient"}.
+
+KCHD ESSENCE users have access to data from the following counties in
+northwest Missouri: Andrew, Atchison, Bates, Benton, Buchanan, Caldwell,
+Carroll, Cass, Clay, Clinton, Daviess, DeKalb, Gentry, Grundy, Harrison,
+Henry, Holt, Jackson, Johnson, Lafayette, Livingston, Mercer, Nodaway,
+Pettis, Platte, Ray, Saline, and Worth.
+}
+
+\subsection{Data details}{
+
+There are 203 fields available to specify in
+\code{dd_fields}. Call \code{ess_dd_vars} for the full list.
 }
 }
 \section{Rnssp package}{
@@ -80,12 +91,14 @@ ess_build_url(
   syndrome = syn,
   start = Sys.Date() - 30,
   data_source = "hospital",
-  output = "ts"
+  output = "ts",
+  regions = c("Cass", "Clay", "Jackson", "Platte")
 )
 
 }
 \seealso{
 Other essence helpers:
+\code{\link{ess_dd_vars}},
 \code{\link[=ess_get_data]{ess_get_data()}},
 \code{\link[=ess_plot_timeseries]{ess_plot_timeseries()}}
 }

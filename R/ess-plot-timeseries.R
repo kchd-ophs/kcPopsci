@@ -2,8 +2,8 @@
 #'
 #' @description
 #' This function configures and plots a time series using the highcharter
-#' package. The output is an interactive plot with alerts and tooltips that
-#' mimic the time series plot within the ESSENCE software.#'
+#' package. The output is an interactive plot with alerts and tooltips, similar
+#' to the time series plots created within the ESSENCE system.
 #'
 #' @param df A time series dataframe downloaded from ESSENSE.
 #' @param title A plot title.
