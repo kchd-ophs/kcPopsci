@@ -1,6 +1,6 @@
 Package: kcPopsci
 Title: Tools for OPHS Analyses
-Version: 0.0.0.9001
+Version: 0.0.0.9000
 Authors@R: c(
     person("Eliot", "Monaco", , "eliotmonaco@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5982-5854")),
@@ -15,6 +15,7 @@ Suggests:
     highcharter,
     htmlwidgets,
     readr,
+    Rnssp,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
