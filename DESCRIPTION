@@ -15,13 +15,14 @@ Suggests:
     highcharter,
     htmlwidgets,
     readr,
-    Rnssp,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
     dplyr,
     rlang,
     tidyr
+Remotes:
+    CDCgov/Rnssp
 Depends: 
     R (>= 4.1)
 LazyData: true
