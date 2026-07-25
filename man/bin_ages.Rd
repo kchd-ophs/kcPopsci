@@ -9,12 +9,9 @@ bin_ages(x, breaks)
 \arguments{
 \item{x}{A numeric vector of ages.}
 
-\item{breaks}{Determines the lower bounds for age bins.
-\itemize{
-\item A numeric vector.
-\item \code{"lifex5"} or \code{"lifex10"} for age bins used in life expectancy
-calculations.
-}}
+\item{breaks}{A numeric vector determining the lower bounds for age bins.
+\code{"lifex5"} or \code{"lifex10"} returns age bins specific to life expectancy
+calculations consisting mainly of either 5- or 10-year intervals.}
 }
 \value{
 A factor vector the same length as \code{x}.

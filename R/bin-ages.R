@@ -4,10 +4,9 @@
 #' Input ages and return age bins.
 #'
 #' @param x A numeric vector of ages.
-#' @param breaks Determines the lower bounds for age bins.
-#' - A numeric vector.
-#' - `"lifex5"` or `"lifex10"` for age bins used in life expectancy
-#' calculations.
+#' @param breaks A numeric vector determining the lower bounds for age bins.
+#' `"lifex5"` or `"lifex10"` returns age bins specific to life expectancy
+#' calculations consisting mainly of either 5- or 10-year intervals.
 #'
 #' @returns A factor vector the same length as `x`.
 #' @export
