@@ -7,10 +7,14 @@
 bin_ages(x, breaks)
 }
 \arguments{
-\item{x}{A numeric vector.}
+\item{x}{A numeric vector of ages.}
 
-\item{breaks}{An integer vector to be used as lower bounds for age bins.
-This is passed to the \code{breaks} argument in \code{\link[=cut]{cut()}}.}
+\item{breaks}{Determines the lower bounds for age bins.
+\itemize{
+\item A numeric vector.
+\item \code{"lifex5"} or \code{"lifex10"} for age bins used in life expectancy
+calculations.
+}}
 }
 \value{
 A factor vector the same length as \code{x}.
@@ -24,13 +28,19 @@ ages <- seq(.5, 10, .5)
 # 5-year bins
 data.frame(
   age = ages,
-  age_group = bin_ages(ages, breaks = seq(0, 10, 5))
+  bin = bin_ages(ages, breaks = seq(0, 10, 5))
 )
 
 # Variable size bins
 data.frame(
   age = ages,
-  age_group = bin_ages(ages, breaks = c(0, 3, 4, 5, 9))
+  bin = bin_ages(ages, breaks = c(0, 3, 4, 5, 9))
+)
+
+# 10-year bins for life expectancy calculations
+data.frame(
+  age = 0:100,
+  bin = bin_ages(0:100, breaks = "lifex10")
 )
 
 }

@@ -3,9 +3,11 @@
 #' @description
 #' Input ages and return age bins.
 #'
-#' @param x A numeric vector.
-#' @param breaks An integer vector to be used as lower bounds for age bins.
-#' This is passed to the `breaks` argument in [cut()].
+#' @param x A numeric vector of ages.
+#' @param breaks Determines the lower bounds for age bins.
+#' - A numeric vector.
+#' - `"lifex5"` or `"lifex10"` for age bins used in life expectancy
+#' calculations.
 #'
 #' @returns A factor vector the same length as `x`.
 #' @export
@@ -16,16 +18,30 @@
 #' # 5-year bins
 #' data.frame(
 #'   age = ages,
-#'   age_group = bin_ages(ages, breaks = seq(0, 10, 5))
+#'   bin = bin_ages(ages, breaks = seq(0, 10, 5))
 #' )
 #'
 #' # Variable size bins
 #' data.frame(
 #'   age = ages,
-#'   age_group = bin_ages(ages, breaks = c(0, 3, 4, 5, 9))
+#'   bin = bin_ages(ages, breaks = c(0, 3, 4, 5, 9))
+#' )
+#'
+#' # 10-year bins for life expectancy calculations
+#' data.frame(
+#'   age = 0:100,
+#'   bin = bin_ages(0:100, breaks = "lifex10")
 #' )
 #'
 bin_ages <- function(x, breaks) {
+  if (length(breaks) == 1 && breaks == "lifex5") {
+    breaks <- c(0, 1, seq(5, 85, 5))
+  } else if (length(breaks) == 1 && breaks == "lifex10") {
+    breaks <- c(0, 1, seq(5, 85, 10))
+  } else if (!is.numeric(breaks)) {
+    stop("Invalid `breaks` value. See function documentation.")
+  }
+
   breaks <- c(breaks, Inf)
 
   start <- breaks[1:(length(breaks) - 1)]
