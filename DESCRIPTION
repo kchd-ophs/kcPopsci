@@ -12,10 +12,11 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
-    highcharter,
-    htmlwidgets,
+    ggplot2,
+    plotly,
     readr,
     Rnssp,
+    scales,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
