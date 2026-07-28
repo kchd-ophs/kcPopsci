@@ -2,22 +2,23 @@
 % Please edit documentation in R/ess-plot-timeseries.R
 \name{ess_plot_timeseries}
 \alias{ess_plot_timeseries}
-\title{Plot a time series with highcharter}
+\title{Plot a time series}
 \usage{
-ess_plot_timeseries(df, title = NULL)
+ess_plot_timeseries(df, title = NULL, width = NULL, height = NULL)
 }
 \arguments{
 \item{df}{A time series dataframe downloaded from ESSENSE.}
 
 \item{title}{A plot title.}
+
+\item{width, height}{The plot dimensions in pixels.}
 }
 \value{
-An object of classes "highchart" and "htmlwidget".
+An object of classes "plotly" and "htmlwidget".
 }
 \description{
-This function configures and plots a time series using the highcharter
-package. The output is an interactive plot with alerts and tooltips, similar
-to the time series plots created within the ESSENCE system.
+This function configures and plots a time series dataframe downloaded from
+ESSENCE.
 }
 \section{Rnssp package}{
 

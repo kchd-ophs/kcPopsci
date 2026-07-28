@@ -1,18 +1,18 @@
-#' Plot a time series with highcharter
+#' Plot a time series
 #'
 #' @description
-#' This function configures and plots a time series using the highcharter
-#' package. The output is an interactive plot with alerts and tooltips, similar
-#' to the time series plots created within the ESSENCE system.
+#' This function configures and plots a time series dataframe downloaded from
+#' ESSENCE.
 #'
 #' @param df A time series dataframe downloaded from ESSENSE.
 #' @param title A plot title.
+#' @param width,height The plot dimensions in pixels.
 #'
 #' @inheritSection ess_build_url Rnssp package
 #'
 #' @family essence helpers
 #'
-#' @returns An object of classes "highchart" and "htmlwidget".
+#' @returns An object of classes "plotly" and "htmlwidget".
 #' @export
 #'
 #' @examples
@@ -20,102 +20,120 @@
 #' ess_plot_timeseries(my_ts, title = "My tremendous time series")
 #' }
 #'
-ess_plot_timeseries <- function(df, title = NULL) {
-  pkg1 <- requireNamespace("highcharter", quietly = TRUE)
+ess_plot_timeseries <- function(
+  df,
+  title = NULL,
+  width = NULL,
+  height = NULL
+) {
+  pkg1 <- requireNamespace("ggplot2", quietly = TRUE)
 
-  pkg2 <- requireNamespace("htmlwidgets", quietly = TRUE)
+  pkg2 <- requireNamespace("scales", quietly = TRUE)
 
-  if (!pkg1 | !pkg2) {
+  pkg3 <- requireNamespace("plotly", quietly = TRUE)
+
+  if (!pkg1 | !pkg2 | !pkg3) {
     stop(paste(
-      "The highcharter and htmlwidgets packages must be installed",
+      "The ggplot2, scales, and plotly packages must be installed",
       "to use this function"
     ))
   }
 
   df <- ess_config_alerts(df)
 
-  ls <- ess_listify_ts(df)
-
-  ess_plot_ts(ls, title)
+  ess_plot_ts(df, title, width, height)
 }
 
-# Configure time series data for plotting
 ess_config_alerts <- function(df) {
-  # Add alert status, color, symbol, and radius
-  lvl <- c("Normal", "Warning", "Anomaly")
+  status <- c("Normal", "Warning", "Anomaly")
 
   fill <- c("#0703fc", "#f2c00a", "#ff0000")
 
-  clr <- c("#04029e", "#a17f03", "#a30202")
+  color <- c("#04029e", "#a17f03", "#a30202")
 
-  shp <- c("circle", "diamond", "triangle")
+  shape <- c(21, 23, 24)
 
-  df <- df |>
-    dplyr::mutate(
-      alert_status = dplyr::case_when(
-        color_id == 0 ~ lvl[1],
-        color_id == 1 ~ lvl[1],
-        color_id == 2 ~ lvl[2],
-        color_id == 3 ~ lvl[3]
-      ),
-      alert_status = factor(.data$alert_status, levels = lvl),
-      alert_fill = fill[.data$alert_status],
-      alert_color = clr[.data$alert_status],
-      alert_symbol = shp[.data$alert_status],
-      alert_radius = 5,
-      alert_line = 1
-    )
+  df$count <- as.numeric(df$count)
+
+  df$alert_status <- df$color_id
+
+  df$alert_status[df$alert_status == 0] <- 1
+
+  df$alert_status <- factor(status[df$alert_status], levels = status)
+
+  df$alert_fill <- fill[df$alert_status]
+
+  df$alert_color <- color[df$alert_status]
+
+  df$alert_symbol <- shape[df$alert_status]
+
+  df
 }
 
-# Convert a dataframe to a list for plotting with highcharter
-ess_listify_ts <- function(df) {
-  df$date <- as.POSIXct(paste(df$date, "12:00:00"))
-
-  list(
-    list(
-      data = lapply(1:nrow(df), \(r) {
-        list(
-          x = highcharter::datetime_to_timestamp(df[r, "date"]),
-          y = df[r, "count"],
-          color = df[r, "alert_fill"],
-          marker = list(
-            symbol = df[r, "alert_symbol"],
-            radius = df[r, "alert_radius"],
-            lineWidth = df[r, "alert_line"],
-            lineColor = df[r, "alert_color"]
-          ),
-          alert_status = df[r, "alert_status"]
-        )
-      })
-    )
+ess_plot_ts <- function(df, title = NULL, width = NULL, height = NULL) {
+  # Tooltip text
+  tt_text <- paste(
+    "<b>Date:</b>", format(df$date, "%b %d, %Y"),
+    "<br><b>Count:</b>", df$count,
+    "<br><b>Alert status:</b>", df$alert_status
   )
-}
 
-# Plot a time series using highcharter
-ess_plot_ts <- function(ls, title) {
-  plot <- highcharter::highchart() |>
-    highcharter::hc_add_series_list(ls) |>
-    highcharter::hc_xAxis(
-      type = "datetime",
-      title = list(text = "Date"),
-      labels = list(format = "{value:%b %d}")
-    ) |>
-    highcharter::hc_yAxis(
-      title = list(text = "Count")
-    ) |>
-    highcharter::hc_legend(enabled = FALSE) |>
-    highcharter::hc_tooltip(formatter = htmlwidgets::JS(
-      "function() {
-        const dt = new Date(this.x);
-        return dt.toDateString() + '<br>' +
-        `Count: <b>${this.y}</b>` + '<br>' +
-        `Alert status: <b>${this.point.alert_status}</b>`;
-      }"
-    ))
+  n_breaks <- ifelse(max(df$count) < 5, max(df$count), 5)
 
-  if (is.null(title)) {
-    plot
-  } else {
-    highcharter::hc_title(plot, text = title)
+  p <- df |>
+    ggplot2::ggplot(ggplot2::aes(
+      x = date,
+      y = count
+    )) +
+    ggplot2::geom_line() +
+    ggplot2::geom_point(
+      ggplot2::aes(
+        fill = .data$alert_fill,
+        color = .data$alert_color,
+        shape = .data$alert_symbol
+      ),
+      size = 2.5,
+      stroke = .5
+    ) +
+    ggplot2::scale_fill_identity() +
+    ggplot2::scale_color_identity() +
+    ggplot2::scale_shape_identity() +
+    ggplot2::scale_y_continuous(breaks = scales::breaks_pretty(n_breaks)) +
+    ggplot2::theme_minimal(base_size = 14) +
+    ggplot2::theme(
+      panel.grid.major.x = ggplot2::element_blank(),
+      panel.grid.minor.x = ggplot2::element_blank(),
+      panel.grid.major.y = ggplot2::element_line(color = "#ddd"),
+      panel.grid.minor.y = ggplot2::element_line(color = "#ddd")
+    ) +
+    ggplot2::labs(x = "Date", y = "Count")
+
+  p <- p |>
+    plotly::ggplotly(
+      width = width,
+      height = height
+    ) |>
+    plotly::style(
+      text = tt_text
+    ) |>
+    plotly::layout(
+      font = list(family = "sans-serif"),
+      hoverlabel = list(
+        bgcolor = "white",
+        font = list(color = "black"),
+        align = "left"
+      )
+    )
+
+  if (!is.null(title)) {
+    p <- p |>
+      plotly::layout(
+        title = list(
+          text = title,
+          automargin = TRUE
+        )
+      )
   }
+
+  p
 }
