@@ -100,6 +100,6 @@ ess_build_url(
 Other essence helpers:
 \code{\link{ess_dd_vars}},
 \code{\link[=ess_get_data]{ess_get_data()}},
-\code{\link[=ess_plot_timeseries]{ess_plot_timeseries()}}
+\code{\link[=ess_plot_ts]{ess_plot_ts()}}
 }
 \concept{essence helpers}
