@@ -53,71 +53,71 @@ test_that("add_plot_date()", {
 
 test_that("no args", {
   df <- data.frame(
-    date = seq(as.Date("2024-05-26"), as.Date("2024-06-14")),
+    date = seq(as.Date("2025-05-26"), as.Date("2025-06-14")),
     count = c(0, 0, 1, 3, 4, 2, 6, 9, 4, 5, 3, 2, 1, 1, 0, 0, 0, 1, 0, 0),
     color_id = c(0, 0, 0, 1, 2, 1, 3, 3, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   p <- ess_plot_ts(df)
 
-  expect_doppelganger("no args", p)
+  vdiffr::expect_doppelganger("no args", p)
 })
 
 test_that("with title", {
   df <- data.frame(
-    date = seq(as.Date("2024-05-26"), as.Date("2024-06-14")),
+    date = seq(as.Date("2025-05-26"), as.Date("2025-06-14")),
     count = c(0, 0, 1, 3, 4, 2, 6, 9, 4, 5, 3, 2, 1, 1, 0, 0, 0, 1, 0, 0),
     color_id = c(0, 0, 0, 1, 2, 1, 3, 3, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
-  p <- ess_plot_ts(df, title = "Unspecified syndrome, May-Jun 2024")
+  p <- ess_plot_ts(df, title = "Unspecified syndrome, May-Jun 2025")
 
-  expect_doppelganger("with title", p)
+  vdiffr::expect_doppelganger("with title", p)
 })
 
 test_that("no alerts", {
   df <- data.frame(
-    date = seq(as.Date("2024-05-26"), as.Date("2024-06-14")),
+    date = seq(as.Date("2025-05-26"), as.Date("2025-06-14")),
     count = c(0, 0, 1, 3, 4, 2, 6, 9, 4, 5, 3, 2, 1, 1, 0, 0, 0, 1, 0, 0),
     color_id = c(0, 0, 0, 1, 2, 1, 3, 3, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   p <- ess_plot_ts(
-    df, title = "Unspecified syndrome, May-Jun 2024",
+    df, title = "Unspecified syndrome, May-Jun 2025",
     show_alerts = FALSE
   )
 
-  expect_doppelganger("no alerts", p)
+  vdiffr::expect_doppelganger("no alerts", p)
 })
 
 test_that("static", {
   df <- data.frame(
-    date = seq(as.Date("2024-05-26"), as.Date("2024-06-14")),
+    date = seq(as.Date("2025-05-26"), as.Date("2025-06-14")),
     count = c(0, 0, 1, 3, 4, 2, 6, 9, 4, 5, 3, 2, 1, 1, 0, 0, 0, 1, 0, 0),
     color_id = c(0, 0, 0, 1, 2, 1, 3, 3, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   p <- ess_plot_ts(
-    df, title = "Unspecified syndrome, May-Jun 2024",
+    df, title = "Unspecified syndrome, May-Jun 2025",
     interactive = FALSE
   )
 
-  expect_doppelganger("static", p)
+  vdiffr::expect_doppelganger("static", p)
 })
 
 test_that("static, no alerts", {
   df <- data.frame(
-    date = seq(as.Date("2024-05-26"), as.Date("2024-06-14")),
+    date = seq(as.Date("2025-05-26"), as.Date("2025-06-14")),
     count = c(0, 0, 1, 3, 4, 2, 6, 9, 4, 5, 3, 2, 1, 1, 0, 0, 0, 1, 0, 0),
     color_id = c(0, 0, 0, 1, 2, 1, 3, 3, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   p <- ess_plot_ts(
-    df, title = "Unspecified syndrome, May-Jun 2024",
+    df, title = "Unspecified syndrome, May-Jun 2025",
     interactive = FALSE, show_alerts = FALSE
   )
 
-  expect_doppelganger("static, no alerts", p)
+  vdiffr::expect_doppelganger("static, no alerts", p)
 })
 
 test_that("wrapped, no title", {
@@ -138,7 +138,7 @@ test_that("wrapped, no title", {
 
   p <- ess_plot_ts(df, wrap_years = TRUE)
 
-  expect_doppelganger("wrapped, no title", p)
+  vdiffr::expect_doppelganger("wrapped, no title", p)
 })
 
 test_that("wrapped, with title", {
@@ -162,7 +162,7 @@ test_that("wrapped, with title", {
     wrap_years = TRUE
   )
 
-  expect_doppelganger("wrapped, with title", p)
+  vdiffr::expect_doppelganger("wrapped, with title", p)
 })
 
 test_that("wrapped, static", {
@@ -186,7 +186,7 @@ test_that("wrapped, static", {
     interactive = FALSE, wrap_years = TRUE
   )
 
-  expect_doppelganger("wrapped, static", p)
+  vdiffr::expect_doppelganger("wrapped, static", p)
 })
 
 test_that("wrapped, static, no alerts", {
@@ -210,6 +210,6 @@ test_that("wrapped, static, no alerts", {
     interactive = FALSE, show_alerts = FALSE, wrap_years = TRUE
   )
 
-  expect_doppelganger("wrapped, static, no alerts", p)
+  vdiffr::expect_doppelganger("wrapped, static, no alerts", p)
 })
 

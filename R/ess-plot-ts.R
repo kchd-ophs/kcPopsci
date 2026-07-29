@@ -24,13 +24,13 @@
 #' @examples
 #' # Static plot
 #' df <- data.frame(
-#'   date = seq(as.Date("2024-05-26"), as.Date("2024-06-14")),
+#'   date = seq(as.Date("2025-05-26"), as.Date("2025-06-14")),
 #'   count = c(0, 0, 1, 3, 4, 2, 6, 9, 4, 5, 3, 2, 1, 1, 0, 0, 0, 1, 0, 0),
 #'   color_id = c(0, 0, 0, 1, 2, 1, 3, 3, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 #' )
 #'
 #' ess_plot_ts(
-#'   df, title = "ED visits for unspecified syndrome, May-Jun 2024",
+#'   df, title = "ED visits for unspecified syndrome, May-Jun 2025",
 #'   interactive = FALSE
 #' )
 #'
@@ -109,7 +109,7 @@ add_plot_date <- function(df) {
   if (any(yrs %% 4 %in% 0)) {
     yr <- yrs[yrs %% 4 %in% 0]
   } else {
-    yr <- yr[1]
+    yr <- yrs[1]
   }
 
   df$plot_date <- as.Date(paste0(yr, "-", format(df$date, "%m-%d")))
