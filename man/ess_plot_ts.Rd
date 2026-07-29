@@ -25,7 +25,7 @@ point shape and color, as well as tooltip if \code{interactive = TRUE}.}
 \item{interactive}{Logical: Should the plot be interactive (via plotly) or
 static (via ggplot2)?}
 
-\item{width, height}{The plot dimensions in pixels. Only used if \code{interactive == TRUE}.}
+\item{width, height}{The plot dimensions in pixels. Only used if \code{interactive = TRUE}.}
 
 \item{wrap_years}{Logical: If the dataset contains multiple years, wrap the
 plot grouped by year using \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}?}

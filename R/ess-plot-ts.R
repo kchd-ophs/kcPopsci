@@ -11,7 +11,7 @@
 #' @param interactive Logical: Should the plot be interactive (via plotly) or
 #' static (via ggplot2)?
 #' @param width,height The plot dimensions in pixels. Only used if `interactive
-#' == TRUE`.
+#' = TRUE`.
 #' @param wrap_years Logical: If the dataset contains multiple years, wrap the
 #' plot grouped by year using [ggplot2::facet_wrap()]?
 #'
