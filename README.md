@@ -5,23 +5,18 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/kchd-ophs/kcPopsci/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kchd-ophs/kcPopsci/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of kcPopsci is to …
+kcPopsci has tools to help with the following tasks in R:
+
+- Calculate life expectancy estimates
+- Download and visualize data from ESSENCE
 
 ## Installation
 
-You can install the development version of kcPopsci like so:
+You can install kcPopsci from GitHub:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
-```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-``` r
-library(kcPopsci)
-## basic example code
+remotes::install_github("kchd-ophs/kcPopsci")
 ```
