@@ -13,8 +13,10 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
     ggplot2,
+    knitr,
     plotly,
     readr,
+    rmarkdown,
     Rnssp,
     scales,
     testthat (>= 3.0.0),
@@ -30,3 +32,4 @@ Depends:
     R (>= 4.1)
 LazyData: true
 Config/roxygen2/version: 8.0.0
+VignetteBuilder: knitr

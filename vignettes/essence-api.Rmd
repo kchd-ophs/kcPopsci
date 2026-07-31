@@ -1,0 +1,199 @@
+---
+title: "ESSENCE API"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ESSENCE API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+```{r setup}
+library(kcPopsci)
+```
+
+## Store ESSENCE API credentials
+
+To use kcPopsci functions that access Missouri's InductiveHealth ESSENCE API, the [Rnssp package](https://cdcgov.github.io/Rnssp/) must be installed, and an ESSENCE login and API key are required. Follow these instructions to create an object of class `NSSPCredentials` which must be loaded anytime the API is accessed in R. (Instructions are copied from a document titled "How to Connect To Local ESSENCE Using R" provided by InductiveHealth.)
+
+```{r}
+remotes::install_github("CDCgov/Rnssp")
+```
+
+Create an encrypted object that contains your local ESSENCE API credentials. To do this, you will need three things (these are provided to you when your local ESSENCE account is created):
+
+1. ESSENCE API Username (this is the same as the username for the ESSENCE webpage)
+2. ESSENCE API Password (this is independent of the password used to access the ESSENCE webpage–it will only be the same value if you have set it to be)
+3. ESSENCE API Key
+
+Copy the following code chunk into an R script and run it. Enter your API Username, API Password, and API Key when prompted.
+
+```{r}
+# Load library
+library(Rnssp)
+
+# Alter credential creation to store and use API key
+IHCredentials <- R6::R6Class(
+  "NSSPCredentials",
+  private = list(
+    ..username = NSSPContainer$new(NULL),
+    ..password = NSSPContainer$new(NULL),
+    ..apikey = NSSPContainer$new(NULL),
+    ..__ = NSSPContainer$new(stringi::stri_rand_strings(
+      1, 1024, pattern = "[A-Za-z0-9*-+=/_$@.?!%|;:#~<>()[]\`\']"
+    ))
+  ),
+  public = list(
+    initialize = function(username = NULL, password = NULL, apikey = NULL) {
+      if (!missing(username)) {
+        private$..username <- NSSPContainer$new(safer::encrypt_string(
+          username, key = private$..__$value, ascii = FALSE
+        ))
+      }
+      if (!missing(password)) {
+        private$..password <- NSSPContainer$new(safer::encrypt_string(
+          password, key = private$..__$value, ascii = FALSE
+        ))
+      }
+      if (!missing(apikey)) {
+        private$..apikey <- NSSPContainer$new(safer::encrypt_string(
+          apikey, key = private$..__$value, ascii = FALSE
+        ))
+      }
+    },
+    get_api_response = function(url) {
+      if (is.null(private$..password$value)) {
+        assertions::assert_string(url)
+        res <- httr::GET(url)
+      } else {
+        assertions::assert_string(url)
+        res <- url %>%
+          httr::GET(
+            ., httr::authenticate(
+              private$..username$value %>%
+                safer::decrypt_string(., private$..__$value),
+              private$..password$value %>%
+                safer::decrypt_string(., private$..__$value)
+            ),
+            httr::add_headers(
+              "api-key" = private$..apikey$value %>%
+                safer::decrypt_string(., private$..__$value)
+            )
+          )
+      }
+      res$request$options$userpwd <- ""
+      cli::cli_alert_info(httr::http_status(res$status_code)$message)
+      return(res)
+    },
+    get_api_data = function(url, fromCSV = FALSE, ...) {
+      assertions::assert_string(url)
+      apir <- self$get_api_response(url)
+      if (apir$status_code == 200) {
+        if (any("data.frame" %in% class(httr::content(apir)))) {
+          return(httr::content(apir))
+        }
+        apir %>%
+          {
+            if (fromCSV) {
+              httr::content(., by = "text/csv") %>% readr::read_csv(...)
+            } else {
+              httr::content(., as = "text") %>% jsonlite::fromJSON()
+            }
+          }
+      }
+    },
+    get_api_graph = function(url, file_ext = ".png") {
+      assertions::assert_string(url)
+      graph <- tempfile(fileext = file_ext)
+      apir <- url %>%
+        httr::GET(
+          ., httr::authenticate(
+            private$..username$value %>%
+              safer::decrypt_string(., private$..__$value),
+            private$..password$value %>%
+              safer::decrypt_string(., private$..__$value)
+          ),
+          httr::add_headers(
+            "api-key" = private$..apikey$value %>%
+              safer::decrypt_string(., private$..__$value)
+          ),
+          httr::write_disk(graph, overwrite = TRUE)
+        )
+      apir$request$options$userpwd <- ""
+      cli::cli_alert_info(httr::http_status(apir$status_code)$message)
+      list("api_response" = apir, "graph" = graph)
+    }
+  )
+)
+
+# Enter IH ESSENCE API credentials
+myProfile <- IHCredentials$new(
+  username = askme("Enter your ESSENCE username:"),
+  password = askme("Enter your API Password:"),
+  apikey = askme("Enter your ESSENCE API key:")
+)
+```
+
+Save the encrypted ESSENCE API credential object to the location of your choice. This will allow you to load your ESSENCE API credentials in future sessions without entering them manually (which helps with automation). This only needs to be done one time unless any of your ESSENCE API credentials change.
+
+```{r}
+save(myProfile, file = "path/to/myProfile.rda")
+```
+
+## Pull ESSENCE data with kcPopsci
+
+Attach kcPopsci and Rnssp to your environment.
+
+```{r}
+library(kcPopsci)
+library(Rnssp)
+```
+
+Load your ESSENCE API credentials.
+
+```{r}
+load("path/to/myProfile.rda")
+```
+
+When building a URL to query the API, some of the arguments, e.g. `user_id` and `syndrome`, may need to come from an API URL created in the [ESSENCE website](https://moessence.inductivehealth.com/).
+
+To copy the URL from ESSENCE, first create the query in the Query Portal. Then, choose the desired output. (Currently, `ess_build_url()` only supports time series and data details outputs.) Once the output is generated, expand the Query Options section in the upper left, choose API URLs, and select the URL text next to Data.
+
+Because the URL can be long and hard to parse, you can use this code to split it into smaller strings for readability.
+
+```{r eval=TRUE}
+url <- "https://moessence.inductivehealth.com/ih_essence/api/timeSeries?geography=mo_clay&geography=mo_jackson&geography=mo_platte&datasource=va_er&startDate=2May2026&medicalGroupingSystem=essencesyndromes&userId=12345&csrfPreventionSalt=9bEXdbKE7kdnjKS1e9i0&endDate=31Jul2026&percentParam=noPercent&aqtTarget=TimeSeries&ccddCategory=heat%20related%20illness%20v2&geographySystem=region&detector=probrepswitch&timeResolution=daily"
+
+strsplit(url, split = "\\?|&")
+```
+
+Build the URL.
+
+```{r}
+# Heat Related Illness v2 syndrome query
+syn <- paste0(
+  "medicalGroupingSystem=essencesyndromes&",
+  "ccddCategory=heat%20related%20illness%20v2"
+)
+
+url <- ess_build_url(
+  user_id = "12345",
+  syndrome = syn,
+  start = "2026-05-01",
+  data_source = "patient",
+  regions = c("clay", "jackson", "platte")
+)
+```
+
+Next, get the data from ESSENCE. `ess_get_data()` wraps `Rnssp::get_api_data()` which returns a message indicating the success or failure of the query.
+
+```{r}
+heat_data <- ess_get_data(url)
+```

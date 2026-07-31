@@ -5,12 +5,12 @@ output: github_document
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
-# knitr::opts_chunk$set(
-#   collapse = TRUE,
-#   comment = "#>",
-#   fig.path = "man/figures/README-",
-#   out.width = "100%"
-# )
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
 ```
 
 # kcPopsci
@@ -21,13 +21,13 @@ output: github_document
 
 kcPopsci has tools to help with the following tasks in R:
 
-- Calculate life expectancy estimates
-- Download and visualize data from ESSENCE
+- Calculating life expectancy estimates
+- Downloading and visualizing data from ESSENCE
 
 ## Installation
 
 You can install kcPopsci from GitHub:
 
-``` r
-remotes::install_github("kchd-ophs/kcPopsci")
+```{r}
+remotes::install_github("kchd-ophs/kcPopsci", dependencies = TRUE)
 ```
