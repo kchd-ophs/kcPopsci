@@ -7,9 +7,10 @@
 ess_build_url(
   user_id,
   syndrome,
+  data_source = c("hospital", "patient"),
+  time_resolution = c("daily", "weekly", "monthly", "quarterly", "yearly"),
   start,
   end = Sys.Date(),
-  data_source = c("hospital", "patient"),
   output = c("dd", "ts"),
   regions = NULL,
   zipcodes = NULL,
@@ -24,10 +25,13 @@ by creating a query in the ESSENCE software online. The ID follows the
 \item{syndrome}{A vector of strings in the format
 \code{"medicalGroupingSystem=<grouping name>&<query category>=<query name>"}.}
 
+\item{data_source}{Either \code{"hospital"} or \code{"patient"}.}
+
+\item{time_resolution}{Can be \code{"daily"} (the default), \code{"weekly"},
+\code{"monthly"}, \code{"quarterly"}, or \code{"yearly"}.}
+
 \item{start, end}{A date formatted YYYY-MM-DD (character or date). \code{end}
 defaults to \code{Sys.Date()}.}
-
-\item{data_source}{Either \code{"hospital"} or \code{"patient"}.}
 
 \item{output}{Either \code{"dd"} (for data details) or \code{"ts"} (for time series).}
 

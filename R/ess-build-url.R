@@ -27,6 +27,8 @@
 #' "userId" field.
 #' @param syndrome A vector of strings in the format
 #' `"medicalGroupingSystem=<grouping name>&<query category>=<query name>"`.
+#' @param time_resolution Can be `"daily"` (the default), `"weekly"`,
+#' `"monthly"`, `"quarterly"`, or `"yearly"`.
 #' @param start,end A date formatted YYYY-MM-DD (character or date). `end`
 #' defaults to `Sys.Date()`.
 #' @param data_source Either `"hospital"` or `"patient"`.
@@ -72,15 +74,18 @@
 ess_build_url <- function(
     user_id,
     syndrome,
+    data_source = c("hospital", "patient"),
+    time_resolution = c("daily", "weekly", "monthly", "quarterly", "yearly"),
     start,
     end = Sys.Date(),
-    data_source = c("hospital", "patient"),
     output = c("dd", "ts"),
     regions = NULL,
     zipcodes = NULL,
     dd_fields = NULL
 ) {
   data_source <- match.arg(data_source)
+
+  time_resolution <- match.arg(time_resolution)
 
   output <- match.arg(output)
 
@@ -153,11 +158,11 @@ ess_build_url <- function(
   # Additional parameters
   params_add <- paste(
     paste0("userId=", user_id),
+    paste0("timeResolution=", time_resolution),
     paste0("startDate=", format(start, "%d%b%Y")),
     paste0("endDate=", format(end, "%d%b%Y")),
     "percentParam=noPercent",
     "detector=probrepswitch",
-    "timeResolution=daily",
     "hasBeenE=1",
     sep = "&"
   )
