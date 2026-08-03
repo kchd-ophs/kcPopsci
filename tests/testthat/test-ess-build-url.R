@@ -28,11 +28,11 @@ test_that("ts, hospital", {
       "geography=mo_jackson",
       "geography=mo_platte",
       "userId=1234",
+      "timeResolution=daily",
       "startDate=01Jun2026",
       "endDate=01Jul2026",
       "percentParam=noPercent",
       "detector=probrepswitch",
-      "timeResolution=daily",
       "hasBeenE=1",
       "medicalGroupingSystem=essencesyndromes",
       "ccddCategory=heat%20related%20illness%20v2",
@@ -72,11 +72,11 @@ test_that("ts, patient", {
       "geography=mo_cass",
       "geography=mo_clay",
       "userId=1234",
+      "timeResolution=daily",
       "startDate=01Jun2026",
       "endDate=01Jul2026",
       "percentParam=noPercent",
       "detector=probrepswitch",
-      "timeResolution=daily",
       "hasBeenE=1",
       "medicalGroupingSystem=essencesyndromes",
       "ccddCategory=heat%20related%20illness%20v2",
@@ -115,11 +115,11 @@ test_that("ts, patient, zipcodes provided", {
       "geographySystem=zipcode",
       "geography=64053,64101,64102,64105,64106",
       "userId=1234",
+      "timeResolution=daily",
       "startDate=01Jun2026",
       "endDate=01Jul2026",
       "percentParam=noPercent",
       "detector=probrepswitch",
-      "timeResolution=daily",
       "hasBeenE=1",
       "medicalGroupingSystem=essencesyndromes",
       "ccddCategory=heat%20related%20illness%20v2",
@@ -159,11 +159,11 @@ test_that("dd, hospital, `dd_fields` is NULL", {
       "geography=mo_jackson",
       "geography=mo_platte",
       "userId=1234",
+      "timeResolution=daily",
       "startDate=01Jun2026",
       "endDate=01Jul2026",
       "percentParam=noPercent",
       "detector=probrepswitch",
-      "timeResolution=daily",
       "hasBeenE=1",
       "medicalGroupingSystem=essencesyndromes",
       "ccddCategory=heat%20related%20illness%20v2",
@@ -210,11 +210,11 @@ test_that("dd, hospital, `dd_fields` is populated", {
       "geography=mo_jackson",
       "geography=mo_platte",
       "userId=1234",
+      "timeResolution=daily",
       "startDate=01Jun2026",
       "endDate=01Jul2026",
       "percentParam=noPercent",
       "detector=probrepswitch",
-      "timeResolution=daily",
       "hasBeenE=1",
       "medicalGroupingSystem=essencesyndromes",
       "ccddCategory=heat%20related%20illness%20v2",
@@ -236,7 +236,10 @@ test_that("error: hospital + zipcodes", {
       output = "dd",
       zipcodes = "64108"
     ),
-    "`zipcodes` can only be used when `data_source = \"patient\"`"
+    paste(
+      "See the function documentation for how to correctly pair geography and",
+      "data source"
+    )
   )
 })
 
@@ -251,7 +254,10 @@ test_that("error: regions + zipcodes", {
       regions = "Jackson",
       zipcodes = "64105"
     ),
-    "Either `regions` or `zipcodes` must be populated, but not both"
+    paste(
+      "See the function documentation for how to correctly pair geography and",
+      "data source"
+    )
   )
 })
 
@@ -264,6 +270,9 @@ test_that("error: no regions or zipcodes", {
       data_source = "patient",
       output = "dd"
     ),
-    "Either `regions` or `zipcodes` must be populated, but not both"
+    paste(
+      "See the function documentation for how to correctly pair geography and",
+      "data source"
+    )
   )
 })

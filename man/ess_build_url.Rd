@@ -7,11 +7,13 @@
 ess_build_url(
   user_id,
   syndrome,
+  data_source = c("hospital", "patient"),
+  time_resolution = c("daily", "weekly", "monthly", "quarterly", "yearly"),
   start,
   end = Sys.Date(),
-  data_source = c("hospital", "patient"),
   output = c("dd", "ts"),
   regions = NULL,
+  hospitals = NULL,
   zipcodes = NULL,
   dd_fields = NULL
 )
@@ -24,15 +26,21 @@ by creating a query in the ESSENCE software online. The ID follows the
 \item{syndrome}{A vector of strings in the format
 \code{"medicalGroupingSystem=<grouping name>&<query category>=<query name>"}.}
 
+\item{data_source}{Either \code{"hospital"} or \code{"patient"}.}
+
+\item{time_resolution}{Can be \code{"daily"} (the default), \code{"weekly"},
+\code{"monthly"}, \code{"quarterly"}, or \code{"yearly"}.}
+
 \item{start, end}{A date formatted YYYY-MM-DD (character or date). \code{end}
 defaults to \code{Sys.Date()}.}
-
-\item{data_source}{Either \code{"hospital"} or \code{"patient"}.}
 
 \item{output}{Either \code{"dd"} (for data details) or \code{"ts"} (for time series).}
 
 \item{regions}{A vector of county names (case insensitive; omit the word
 "county").}
+
+\item{hospitals}{A vector of hospitals. Only used if
+\code{datasource = "hospital"}.}
 
 \item{zipcodes}{A vector of ZIP codes (numeric or character). Only used if
 \code{data_source = "patient"}.}
@@ -49,16 +57,33 @@ This function creates a URL (or a vector of URLs) to query the API for
 Missouri's InductiveHealth ESSENCE system.
 }
 \details{
+\subsection{Data source}{
+
+From the InductiveHealth ESSENCE user guide:
+
+"'By Patient Location' datasources are geographically binned based on
+patient zip code. Users that do not have full access to all data in the
+system should use this if they want to see records for patients that are
+residents of their jurisdiction, regardless of where they sought care.
+
+"'By Hospital Location' datasources are geographically binned based on
+facility zip code. Users that do not have full access to all data in the
+system should use this if they want to see records from facilities in their
+jurisdiction, regardless of patient residence."
+}
+
 \subsection{Geography}{
 
-Only one of \code{regions} or \code{zipcodes} should be populated. \code{zipcodes} can only
-be used if \code{data_source = "patient"}.
+When \code{data_source = "hospital"}, hospitals can be selected by county using
+the \code{regions} argument or by hospital using the \code{hospitals} argument. When
+\code{data_source = "patient"}, the area of residence can be selected by county
+using the \code{regions} argument or by ZIP code using the \code{zipcodes} argument.
 
-KCHD ESSENCE users have access to data from the following counties in
-northwest Missouri: Andrew, Atchison, Bates, Benton, Buchanan, Caldwell,
-Carroll, Cass, Clay, Clinton, Daviess, DeKalb, Gentry, Grundy, Harrison,
-Henry, Holt, Jackson, Johnson, Lafayette, Livingston, Mercer, Nodaway,
-Pettis, Platte, Ray, Saline, and Worth.
+The following counties in northwest Missouri are available to KCHD ESSENCE
+users: Andrew, Atchison, Bates, Benton, Buchanan, Caldwell, Carroll, Cass,
+Clay, Clinton, Daviess, DeKalb, Gentry, Grundy, Harrison, Henry, Holt,
+Jackson, Johnson, Lafayette, Livingston, Mercer, Nodaway, Pettis, Platte,
+Ray, Saline, and Worth.
 }
 
 \subsection{Data details}{
