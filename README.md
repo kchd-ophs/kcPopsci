@@ -18,5 +18,9 @@ kcPopsci has tools to help with the following tasks in R:
 You can install kcPopsci from GitHub:
 
 ``` r
-remotes::install_github("kchd-ophs/kcPopsci", dependencies = TRUE)
+remotes::install_github(
+  "kchd-ophs/kcPopsci",
+  dependencies = TRUE,
+  build_vignettes = TRUE
+)
 ```
