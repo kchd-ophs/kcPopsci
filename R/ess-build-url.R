@@ -6,16 +6,32 @@
 #'
 #' @details
 #'
+#' ## Data source
+#'
+#' From the InductiveHealth ESSENCE user guide:
+#'
+#' "'By Patient Location' datasources are geographically binned based on
+#' patient zip code. Users that do not have full access to all data in the
+#' system should use this if they want to see records for patients that are
+#' residents of their jurisdiction, regardless of where they sought care.
+#'
+#' "'By Hospital Location' datasources are geographically binned based on
+#' facility zip code. Users that do not have full access to all data in the
+#' system should use this if they want to see records from facilities in their
+#' jurisdiction, regardless of patient residence."
+#'
 #' ## Geography
 #'
-#' Only one of `regions` or `zipcodes` should be populated. `zipcodes` can only
-#' be used if `data_source = "patient"`.
+#' When `data_source = "hospital"`, hospitals can be selected by county using
+#' the `regions` argument or by hospital using the `hospitals` argument. When
+#' `data_source = "patient"`, the area of residence can be selected by county
+#' using the `regions` argument or by ZIP code using the `zipcodes` argument.
 #'
-#' KCHD ESSENCE users have access to data from the following counties in
-#' northwest Missouri: Andrew, Atchison, Bates, Benton, Buchanan, Caldwell,
-#' Carroll, Cass, Clay, Clinton, Daviess, DeKalb, Gentry, Grundy, Harrison,
-#' Henry, Holt, Jackson, Johnson, Lafayette, Livingston, Mercer, Nodaway,
-#' Pettis, Platte, Ray, Saline, and Worth.
+#' The following counties in northwest Missouri are available to KCHD ESSENCE
+#' users: Andrew, Atchison, Bates, Benton, Buchanan, Caldwell, Carroll, Cass,
+#' Clay, Clinton, Daviess, DeKalb, Gentry, Grundy, Harrison, Henry, Holt,
+#' Jackson, Johnson, Lafayette, Livingston, Mercer, Nodaway, Pettis, Platte,
+#' Ray, Saline, and Worth.
 #'
 #' ## Data details
 #'
@@ -35,6 +51,8 @@
 #' @param output Either `"dd"` (for data details) or `"ts"` (for time series).
 #' @param regions A vector of county names (case insensitive; omit the word
 #' "county").
+#' @param hospitals A vector of hospitals. Only used if
+#' `datasource = "hospital"`.
 #' @param zipcodes A vector of ZIP codes (numeric or character). Only used if
 #' `data_source = "patient"`.
 #' @param dd_fields A vector of data details fields to pull. `NULL` returns all
@@ -80,6 +98,7 @@ ess_build_url <- function(
     end = Sys.Date(),
     output = c("dd", "ts"),
     regions = NULL,
+    hospitals = NULL,
     zipcodes = NULL,
     dd_fields = NULL
 ) {
@@ -93,10 +112,6 @@ ess_build_url <- function(
 
   if (is.na(start) | is.na(end)) {
     stop("`start` and `end` must be valid dates formatted YYYY-MM-DD")
-  }
-
-  if (data_source != "patient" & !is.null(zipcodes)) {
-    stop("`zipcodes` can only be used when `data_source = \"patient\"`")
   }
 
   # Output parameters
@@ -130,7 +145,7 @@ ess_build_url <- function(
   }
 
   # Geography
-  if (!is.null(regions) & is.null(zipcodes)) {
+  if (!is.null(regions) & is.null(hospitals) & is.null(zipcodes)) {
     if (data_source == "hospital") {
       rgn <- "hospitalregion"
     } else if (data_source == "patient") {
@@ -145,14 +160,26 @@ ess_build_url <- function(
       ),
       sep = "&"
     )
-  } else if (!is.null(zipcodes) & is.null(regions)) {
+  } else if (data_source == "hospital" & is.null(regions) & !is.null(hospitals)) {
+    params_geo <- paste(
+      "geographySystem=hospital",
+      paste(
+        paste0("geography=", hospitals),
+        collapse = "&"
+      ),
+      sep = "&"
+    )
+  } else if (data_source == "patient" & is.null(regions) & !is.null(zipcodes)) {
     params_geo <- paste(
       "geographySystem=zipcode",
       paste0("geography=", paste(zipcodes, collapse = ",")),
       sep = "&"
     )
   } else {
-    stop("Either `regions` or `zipcodes` must be populated, but not both")
+    stop(paste(
+      "See the function documentation for how to correctly pair geography and",
+      "data source"
+    ))
   }
 
   # Additional parameters

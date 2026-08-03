@@ -236,7 +236,10 @@ test_that("error: hospital + zipcodes", {
       output = "dd",
       zipcodes = "64108"
     ),
-    "`zipcodes` can only be used when `data_source = \"patient\"`"
+    paste(
+      "See the function documentation for how to correctly pair geography and",
+      "data source"
+    )
   )
 })
 
@@ -251,7 +254,10 @@ test_that("error: regions + zipcodes", {
       regions = "Jackson",
       zipcodes = "64105"
     ),
-    "Either `regions` or `zipcodes` must be populated, but not both"
+    paste(
+      "See the function documentation for how to correctly pair geography and",
+      "data source"
+    )
   )
 })
 
@@ -264,6 +270,9 @@ test_that("error: no regions or zipcodes", {
       data_source = "patient",
       output = "dd"
     ),
-    "Either `regions` or `zipcodes` must be populated, but not both"
+    paste(
+      "See the function documentation for how to correctly pair geography and",
+      "data source"
+    )
   )
 })
