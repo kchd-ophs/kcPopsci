@@ -28,6 +28,6 @@ kcPopsci has tools to help with the following tasks in R:
 
 You can install kcPopsci from GitHub:
 
-```{r}
+```{r eval=FALSE}
 remotes::install_github("kchd-ophs/kcPopsci", dependencies = TRUE)
 ```
