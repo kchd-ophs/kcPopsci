@@ -38,26 +38,26 @@
 #' There are `r length(ess_dd_vars)` fields available to specify in
 #' `dd_fields`. Call `ess_dd_vars` for the full list.
 #'
-#' @param user_id An ESSENCE user ID (numeric or character). This can be found
-#' by creating a query in the ESSENCE software online. The ID follows the
-#' "userId" field.
-#' @param syndrome A vector of strings in the format
-#' `"medicalGroupingSystem=<grouping name>&<query category>=<query name>"`.
+#' @param data_source Either `"hospital"` or `"patient"`.
 #' @param time_resolution Can be `"daily"` (the default), `"weekly"`,
 #' `"monthly"`, `"quarterly"`, or `"yearly"`.
 #' @param start,end A date formatted YYYY-MM-DD (character or date). `end`
 #' defaults to `Sys.Date()`.
-#' @param data_source Either `"hospital"` or `"patient"`.
-#' @param output Either `"dd"` (for data details) or `"ts"` (for time series).
+#' @param syndrome A vector of strings in the format
+#' `"medicalGroupingSystem=<grouping name>&<query category>=<query name>"`.
 #' @param regions A vector of county names (case insensitive; omit the word
 #' "county").
 #' @param hospitals A vector of hospitals. Only used if
 #' `datasource = "hospital"`.
 #' @param zipcodes A vector of ZIP codes (numeric or character). Only used if
 #' `data_source = "patient"`.
+#' @param output Either `"dd"` (for data details) or `"ts"` (for time series).
 #' @param dd_fields A vector of data details fields to pull. `NULL` returns all
 #' available fields. If not `NULL`, "EssenceID" is added to prevent aggregation
 #' of data.
+#' @param user_id An ESSENCE user ID (numeric or character). This can be found
+#' by creating a query in the ESSENCE software online. The ID follows the
+#' "userId" field.
 #'
 #' @section Rnssp package:
 #'
@@ -90,17 +90,17 @@
 #' )
 #'
 ess_build_url <- function(
-    user_id,
-    syndrome,
     data_source = c("hospital", "patient"),
     time_resolution = c("daily", "weekly", "monthly", "quarterly", "yearly"),
     start,
     end = Sys.Date(),
-    output = c("dd", "ts"),
+    syndrome = NULL,
     regions = NULL,
     hospitals = NULL,
     zipcodes = NULL,
-    dd_fields = NULL
+    output = c("dd", "ts"),
+    dd_fields = NULL,
+    user_id
 ) {
   data_source <- match.arg(data_source)
 
@@ -182,6 +182,20 @@ ess_build_url <- function(
     ))
   }
 
+  # Syndrome
+  if (is.null(syndrome)) {
+    syn <- "medicalGroupingSystem=essencesyndromes"
+  } else {
+    syn <- syndrome
+  }
+
+  # Detector
+  if (time_resolution %in% c("daily", "weekly")) {
+    detector <- "detector=probrepswitch"
+  } else {
+    detector <- "detector=nodetectordetector"
+  }
+
   # Additional parameters
   params_add <- paste(
     paste0("userId=", user_id),
@@ -189,7 +203,7 @@ ess_build_url <- function(
     paste0("startDate=", format(start, "%d%b%Y")),
     paste0("endDate=", format(end, "%d%b%Y")),
     "percentParam=noPercent",
-    "detector=probrepswitch",
+    detector,
     "hasBeenE=1",
     sep = "&"
   )
@@ -198,5 +212,5 @@ ess_build_url <- function(
 
   endpoint <- "https://moessence.inductivehealth.com/ih_essence/api/"
 
-  paste0(endpoint, op, paste0(params, "&", syndrome))
+  paste0(endpoint, op, paste0(params, "&", syn))
 }
