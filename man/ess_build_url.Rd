@@ -5,27 +5,20 @@
 \title{Build a URL for the ESSENCE API}
 \usage{
 ess_build_url(
-  user_id,
-  syndrome,
   data_source = c("hospital", "patient"),
   time_resolution = c("daily", "weekly", "monthly", "quarterly", "yearly"),
   start,
   end = Sys.Date(),
-  output = c("dd", "ts"),
+  syndrome = NULL,
   regions = NULL,
   hospitals = NULL,
   zipcodes = NULL,
-  dd_fields = NULL
+  output = c("dd", "ts"),
+  dd_fields = NULL,
+  user_id
 )
 }
 \arguments{
-\item{user_id}{An ESSENCE user ID (numeric or character). This can be found
-by creating a query in the ESSENCE software online. The ID follows the
-"userId" field.}
-
-\item{syndrome}{A vector of strings in the format
-\code{"medicalGroupingSystem=<grouping name>&<query category>=<query name>"}.}
-
 \item{data_source}{Either \code{"hospital"} or \code{"patient"}.}
 
 \item{time_resolution}{Can be \code{"daily"} (the default), \code{"weekly"},
@@ -34,7 +27,8 @@ by creating a query in the ESSENCE software online. The ID follows the
 \item{start, end}{A date formatted YYYY-MM-DD (character or date). \code{end}
 defaults to \code{Sys.Date()}.}
 
-\item{output}{Either \code{"dd"} (for data details) or \code{"ts"} (for time series).}
+\item{syndrome}{A vector of strings in the format
+\code{"medicalGroupingSystem=<grouping name>&<query category>=<query name>"}.}
 
 \item{regions}{A vector of county names (case insensitive; omit the word
 "county").}
@@ -45,9 +39,15 @@ defaults to \code{Sys.Date()}.}
 \item{zipcodes}{A vector of ZIP codes (numeric or character). Only used if
 \code{data_source = "patient"}.}
 
+\item{output}{Either \code{"dd"} (for data details) or \code{"ts"} (for time series).}
+
 \item{dd_fields}{A vector of data details fields to pull. \code{NULL} returns all
 available fields. If not \code{NULL}, "EssenceID" is added to prevent aggregation
 of data.}
+
+\item{user_id}{An ESSENCE user ID (numeric or character). This can be found
+by creating a query in the ESSENCE software online. The ID follows the
+"userId" field.}
 }
 \value{
 A dataframe.
