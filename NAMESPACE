@@ -12,5 +12,7 @@ export(make_age_bins)
 export(merge_pop_deaths)
 import(dplyr)
 importFrom(rlang,.data)
-importFrom(tidyr,complete)
-importFrom(tidyr,replace_na)
+importFrom(tidyr,
+  complete,
+  replace_na
+)
