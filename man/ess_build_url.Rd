@@ -15,7 +15,8 @@ ess_build_url(
   zipcodes = NULL,
   output = c("dd", "ts"),
   dd_fields = NULL,
-  user_id
+  user_id,
+  vars = NULL
 )
 }
 \arguments{
@@ -48,6 +49,9 @@ of data.}
 \item{user_id}{An ESSENCE user ID (numeric or character). This can be found
 by creating a query in the ESSENCE software online. The ID follows the
 "userId" field.}
+
+\item{vars}{A list of field and value pairs to add to the query URL, e.g.,
+\code{list(cDeath = "yes")}.}
 }
 \value{
 A dataframe.

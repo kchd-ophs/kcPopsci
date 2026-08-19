@@ -58,6 +58,8 @@
 #' @param user_id An ESSENCE user ID (numeric or character). This can be found
 #' by creating a query in the ESSENCE software online. The ID follows the
 #' "userId" field.
+#' @param vars A list of field and value pairs to add to the query URL, e.g.,
+#' `list(cDeath = "yes")`.
 #'
 #' @section Rnssp package:
 #'
@@ -100,13 +102,18 @@ ess_build_url <- function(
     zipcodes = NULL,
     output = c("dd", "ts"),
     dd_fields = NULL,
-    user_id
+    user_id,
+    vars = NULL
 ) {
   data_source <- match.arg(data_source)
 
   time_resolution <- match.arg(time_resolution)
 
   output <- match.arg(output)
+
+  if (!is.null(vars) && !is.list(vars)) {
+    stop("`vars` must be a list")
+  }
 
   start <- as.Date(start); end <- as.Date(end)
 
@@ -207,6 +214,21 @@ ess_build_url <- function(
     "hasBeenE=1",
     sep = "&"
   )
+
+  # Free text variables
+  if (!is.null(vars)) {
+    vars <- mapply(
+      \(x, i) {
+        paste0(i, "=", x)
+      },
+      vars,
+      names(vars)
+    )
+
+    vars <- paste(vars, collapse = "&")
+
+    params_add <- paste(params_add, vars, sep = "&")
+  }
 
   params <- paste(params_out, params_ds, params_geo, params_add, sep = "&")
 
