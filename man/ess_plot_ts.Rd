@@ -84,6 +84,7 @@ ess_plot_ts(
 Other essence helpers:
 \code{\link[=ess_build_url]{ess_build_url()}},
 \code{\link{ess_dd_vars}},
-\code{\link[=ess_get_data]{ess_get_data()}}
+\code{\link[=ess_get_data]{ess_get_data()}},
+\code{\link{kc_hospitals}}
 }
 \concept{essence helpers}

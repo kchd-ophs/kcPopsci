@@ -15,6 +15,7 @@ ess_build_url(
   zipcodes = NULL,
   output = c("dd", "ts"),
   dd_fields = NULL,
+  free_vars = NULL,
   user_id
 )
 }
@@ -44,6 +45,8 @@ defaults to \code{Sys.Date()}.}
 \item{dd_fields}{A vector of data details fields to pull. \code{NULL} returns all
 available fields. If not \code{NULL}, "EssenceID" is added to prevent aggregation
 of data.}
+
+\item{free_vars}{A list of field and value pairs not covered by another argument to add to the query URL, e.g., \code{list(cDeath = "yes")}.}
 
 \item{user_id}{An ESSENCE user ID (numeric or character). This can be found
 by creating a query in the ESSENCE software online. The ID follows the
@@ -125,6 +128,7 @@ ess_build_url(
 Other essence helpers:
 \code{\link{ess_dd_vars}},
 \code{\link[=ess_get_data]{ess_get_data()}},
-\code{\link[=ess_plot_ts]{ess_plot_ts()}}
+\code{\link[=ess_plot_ts]{ess_plot_ts()}},
+\code{\link{kc_hospitals}}
 }
 \concept{essence helpers}

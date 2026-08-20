@@ -55,6 +55,7 @@
 #' @param dd_fields A vector of data details fields to pull. `NULL` returns all
 #' available fields. If not `NULL`, "EssenceID" is added to prevent aggregation
 #' of data.
+#' @param free_vars A list of field and value pairs not covered by another argument to add to the query URL, e.g., `list(cDeath = "yes")`.
 #' @param user_id An ESSENCE user ID (numeric or character). This can be found
 #' by creating a query in the ESSENCE software online. The ID follows the
 #' "userId" field.
@@ -100,6 +101,7 @@ ess_build_url <- function(
     zipcodes = NULL,
     output = c("dd", "ts"),
     dd_fields = NULL,
+    free_vars = NULL,
     user_id
 ) {
   data_source <- match.arg(data_source)
@@ -110,8 +112,8 @@ ess_build_url <- function(
 
   start <- as.Date(start); end <- as.Date(end)
 
-  if (is.na(start) | is.na(end)) {
-    stop("`start` and `end` must be valid dates formatted YYYY-MM-DD")
+  if (!is.null(free_vars) && !is.list(free_vars)) {
+    stop("`free_vars` must be a list")
   }
 
   # Output parameters
@@ -207,6 +209,19 @@ ess_build_url <- function(
     "hasBeenE=1",
     sep = "&"
   )
+
+  # Free text variables
+  if (!is.null(free_vars)) {
+    free_vars <- mapply(
+      \(x, i) paste0(i, "=", x),
+      free_vars,
+      names(free_vars)
+    )
+
+    free_vars <- paste(free_vars, collapse = "&")
+
+    params_add <- paste(params_add, free_vars, sep = "&")
+  }
 
   params <- paste(params_out, params_ds, params_geo, params_add, sep = "&")
 
