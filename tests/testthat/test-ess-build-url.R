@@ -1,15 +1,9 @@
 test_that("ts, hospital", {
-  syn <- paste(
-    "medicalGroupingSystem=essencesyndromes",
-    "ccddCategory=heat%20related%20illness%20v2",
-    sep = "&"
-  )
-
   date <- as.Date("2026-07-01")
 
   act <- ess_build_url(
     user_id = 1234,
-    syndrome = syn,
+    syndrome = "syndromefield=somesyndrome",
     start = date - 30,
     end = date,
     data_source = "hospital",
@@ -17,8 +11,8 @@ test_that("ts, hospital", {
     regions = c("Cass", "Clay", "Jackson", "Platte")
   )
 
-  exp <- paste(
-    "https://moessence.inductivehealth.com/ih_essence/api/timeSeries",
+  exp <- paste0(
+    "https://moessence.inductivehealth.com/ih_essence/api/timeSeries?",
     paste(
       "aqtTarget=TimeSeries",
       "datasource=va_hosp",
@@ -34,28 +28,20 @@ test_that("ts, hospital", {
       "percentParam=noPercent",
       "detector=probrepswitch",
       "hasBeenE=1",
-      "medicalGroupingSystem=essencesyndromes",
-      "ccddCategory=heat%20related%20illness%20v2",
+      "syndromefield=somesyndrome",
       sep = "&"
-    ),
-    sep = "?"
+    )
   )
 
   expect_equal(act, exp)
 })
 
 test_that("ts, patient", {
-  syn <- paste(
-    "medicalGroupingSystem=essencesyndromes",
-    "ccddCategory=heat%20related%20illness%20v2",
-    sep = "&"
-  )
-
   date <- as.Date("2026-07-01")
 
   act <- ess_build_url(
     user_id = 1234,
-    syndrome = syn,
+    syndrome = "syndromefield=somesyndrome",
     start = date - 30,
     end = date,
     data_source = "patient",
@@ -63,8 +49,8 @@ test_that("ts, patient", {
     regions = c("Cass", "Clay")
   )
 
-  exp <- paste(
-    "https://moessence.inductivehealth.com/ih_essence/api/timeSeries",
+  exp <- paste0(
+    "https://moessence.inductivehealth.com/ih_essence/api/timeSeries?",
     paste(
       "aqtTarget=TimeSeries",
       "datasource=va_er",
@@ -78,28 +64,20 @@ test_that("ts, patient", {
       "percentParam=noPercent",
       "detector=probrepswitch",
       "hasBeenE=1",
-      "medicalGroupingSystem=essencesyndromes",
-      "ccddCategory=heat%20related%20illness%20v2",
+      "syndromefield=somesyndrome",
       sep = "&"
-    ),
-    sep = "?"
+    )
   )
 
   expect_equal(act, exp)
 })
 
 test_that("ts, patient, zipcodes provided", {
-  syn <- paste(
-    "medicalGroupingSystem=essencesyndromes",
-    "ccddCategory=heat%20related%20illness%20v2",
-    sep = "&"
-  )
-
   date <- as.Date("2026-07-01")
 
   act <- ess_build_url(
     user_id = 1234,
-    syndrome = syn,
+    syndrome = "syndromefield=somesyndrome",
     start = date - 30,
     end = date,
     data_source = "patient",
@@ -107,8 +85,8 @@ test_that("ts, patient, zipcodes provided", {
     zipcodes = c("64053", "64101", "64102", "64105", "64106")
   )
 
-  exp <- paste(
-    "https://moessence.inductivehealth.com/ih_essence/api/timeSeries",
+  exp <- paste0(
+    "https://moessence.inductivehealth.com/ih_essence/api/timeSeries?",
     paste(
       "aqtTarget=TimeSeries",
       "datasource=va_er",
@@ -121,28 +99,20 @@ test_that("ts, patient, zipcodes provided", {
       "percentParam=noPercent",
       "detector=probrepswitch",
       "hasBeenE=1",
-      "medicalGroupingSystem=essencesyndromes",
-      "ccddCategory=heat%20related%20illness%20v2",
+      "syndromefield=somesyndrome",
       sep = "&"
-    ),
-    sep = "?"
+    )
   )
 
   expect_equal(act, exp)
 })
 
 test_that("dd, hospital, `dd_fields` is NULL", {
-  syn <- paste(
-    "medicalGroupingSystem=essencesyndromes",
-    "ccddCategory=heat%20related%20illness%20v2",
-    sep = "&"
-  )
-
   date <- as.Date("2026-07-01")
 
   act <- ess_build_url(
     user_id = 1234,
-    syndrome = syn,
+    syndrome = "syndromefield=somesyndrome",
     start = date - 30,
     end = date,
     data_source = "hospital",
@@ -150,8 +120,8 @@ test_that("dd, hospital, `dd_fields` is NULL", {
     regions = c("Jackson", "Platte")
   )
 
-  exp <- paste(
-    "https://moessence.inductivehealth.com/ih_essence/api/dataDetails/csv",
+  exp <- paste0(
+    "https://moessence.inductivehealth.com/ih_essence/api/dataDetails/csv?",
     paste(
       "aqtTarget=DataDetails",
       "datasource=va_hosp",
@@ -165,28 +135,20 @@ test_that("dd, hospital, `dd_fields` is NULL", {
       "percentParam=noPercent",
       "detector=probrepswitch",
       "hasBeenE=1",
-      "medicalGroupingSystem=essencesyndromes",
-      "ccddCategory=heat%20related%20illness%20v2",
+      "syndromefield=somesyndrome",
       sep = "&"
-    ),
-    sep = "?"
+    )
   )
 
   expect_equal(act, exp)
 })
 
 test_that("dd, hospital, `dd_fields` is populated", {
-  syn <- paste(
-    "medicalGroupingSystem=essencesyndromes",
-    "ccddCategory=heat%20related%20illness%20v2",
-    sep = "&"
-  )
-
   date <- as.Date("2026-07-01")
 
   act <- ess_build_url(
     user_id = 1234,
-    syndrome = syn,
+    syndrome = "syndromefield=somesyndrome",
     start = date - 30,
     end = date,
     data_source = "hospital",
@@ -195,8 +157,8 @@ test_that("dd, hospital, `dd_fields` is populated", {
     dd_fields = c("Date", "HospitalName", "HasBeenE")
   )
 
-  exp <- paste(
-    "https://moessence.inductivehealth.com/ih_essence/api/dataDetails/csv",
+  exp <- paste0(
+    "https://moessence.inductivehealth.com/ih_essence/api/dataDetails/csv?",
     paste(
       "aqtTarget=DataDetails",
       "field=Date",
@@ -216,11 +178,49 @@ test_that("dd, hospital, `dd_fields` is populated", {
       "percentParam=noPercent",
       "detector=probrepswitch",
       "hasBeenE=1",
-      "medicalGroupingSystem=essencesyndromes",
-      "ccddCategory=heat%20related%20illness%20v2",
+      "syndromefield=somesyndrome",
       sep = "&"
-    ),
-    sep = "?"
+    )
+  )
+
+  expect_equal(act, exp)
+})
+
+test_that("`free_vars` used", {
+  date <- as.Date("2026-07-01")
+
+  act <- ess_build_url(
+    user_id = 1234,
+    syndrome = "syndromefield=somesyndrome",
+    start = date - 30,
+    end = date,
+    data_source = "hospital",
+    output = "ts",
+    regions = c("Cass", "Clay", "Jackson", "Platte"),
+    free_vars = list(one = "apple", two = "banana")
+  )
+
+  exp <- paste0(
+    "https://moessence.inductivehealth.com/ih_essence/api/timeSeries?",
+    paste(
+      "aqtTarget=TimeSeries",
+      "datasource=va_hosp",
+      "geographySystem=hospitalregion",
+      "geography=mo_cass",
+      "geography=mo_clay",
+      "geography=mo_jackson",
+      "geography=mo_platte",
+      "userId=1234",
+      "timeResolution=daily",
+      "startDate=01Jun2026",
+      "endDate=01Jul2026",
+      "percentParam=noPercent",
+      "detector=probrepswitch",
+      "hasBeenE=1",
+      "one=apple&two=banana",
+      "syndromefield=somesyndrome",
+      sep = "&"
+    )
   )
 
   expect_equal(act, exp)
@@ -274,5 +274,19 @@ test_that("error: no regions or zipcodes", {
       "See the function documentation for how to correctly pair geography and",
       "data source"
     )
+  )
+})
+
+test_that("`free_vars` not a list", {
+  expect_error(
+    ess_build_url(
+      user_id = 1234,
+      syndrome = "syndrome",
+      start = Sys.Date() - 30,
+      data_source = "patient",
+      output = "dd",
+      free_vars = "one=apple"
+    ),
+    "`free_vars` must be a list"
   )
 })
