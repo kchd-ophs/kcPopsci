@@ -4,17 +4,20 @@
 \alias{assemble_deaths}
 \title{Prepare Death File}
 \usage{
-assemble_deaths(deaths, ..., width = 10)
+assemble_deaths(deaths, age_col, ..., breaks = c("lifex5", "lifex10"))
 }
 \arguments{
-\item{deaths}{A 2 column data frame/ data frame extension (e.g. a tibble),
-with a column indicating age bins ("age_bin") and a column indicating death
-counts. The first row should be the age bin from 0-1.}
+\item{deaths}{A data frame/ data frame extension (e.g. a tibble),
+with at minimum a column indicating age bins ("age_bin") and a column
+indicating death counts. The first row should be the age bin from 0-1.}
+
+\item{age_col}{Name of the column with ages to be binned.}
 
 \item{...}{Additional subgroups to be used for life expectancy calculation
-(e.g. race, geography, year)}
+(e.g. race, geography, year).}
 
-\item{width}{age bin width to pass to make_age_bins()}
+\item{breaks}{either "lifex5" or "lifex10", indicating the age bin width to
+pass to bin_ages(). If not provided, will use "lifex10"}
 }
 \value{
 A data frame/data frame extension (e.g. a tibble) with counts of
@@ -29,10 +32,10 @@ expectancy calculation
 set.seed(0)
 n <- 100
 df <- data.frame(
- AGE=sample(2:100,size=n,replace=TRUE),
- SEX=sample(c("M","F"),size=n,replace=TRUE)
+ age=sample(2:100, size=n,replace=TRUE),
+ sex=sample(c("M","F"), size=n, replace=TRUE)
 )
-assemble_deaths(df, width=10)
-assemble_deaths(df, SEX,width=5)
+assemble_deaths(deaths=df, age_col=age, breaks="lifex10")
+assemble_deaths(deaths=df, age_col=age, sex, breaks="lifex5")
 
 }
