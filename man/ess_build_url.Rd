@@ -46,7 +46,8 @@ defaults to \code{Sys.Date()}.}
 available fields. If not \code{NULL}, "EssenceID" is added to prevent aggregation
 of data.}
 
-\item{free_vars}{A list of field and value pairs not covered by another argument to add to the query URL, e.g., \code{list(cDeath = "yes")}.}
+\item{free_vars}{A list of field and value pairs not covered by another
+argument to add to the query URL, e.g., \code{list(hasBeenE = 1, cDeath = "yes")}.}
 
 \item{user_id}{An ESSENCE user ID (numeric or character). This can be found
 by creating a query in the ESSENCE software online. The ID follows the
@@ -60,6 +61,14 @@ This function creates a URL (or a vector of URLs) to query the API for
 Missouri's InductiveHealth ESSENCE system.
 }
 \details{
+\subsection{"Has Been" filters}{
+
+By setting a "Has Been" filter to 1, only data for patients in that class
+will be returned. For example, if \code{free_vars = list(hasBeenE = 1)}, then
+records will be limited to patients who were seen in the emergency
+department.
+}
+
 \subsection{Data source}{
 
 From the InductiveHealth ESSENCE user guide:
@@ -93,6 +102,9 @@ Ray, Saline, and Worth.
 
 There are 203 fields available to specify in
 \code{dd_fields}. Call \code{ess_dd_vars} for the full list.
+
+Use \code{dd_fields = "EssenceID"} to ensure that individual records are returned.
+Otherwise, it appears that summarized data is returned.
 }
 }
 \section{Rnssp package}{
@@ -120,7 +132,8 @@ ess_build_url(
   start = Sys.Date() - 30,
   data_source = "hospital",
   output = "ts",
-  regions = c("Cass", "Clay", "Jackson", "Platte")
+  regions = c("Cass", "Clay", "Jackson", "Platte"),
+  free_vars = list(hasBeenE = 1)
 )
 
 }

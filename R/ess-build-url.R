@@ -6,6 +6,13 @@
 #'
 #' @details
 #'
+#' ## "Has Been" filters
+#'
+#' By setting a "Has Been" filter to 1, only data for patients in that class
+#' will be returned. For example, if `free_vars = list(hasBeenE = 1)`, then
+#' records will be limited to patients who were seen in the emergency
+#' department.
+#'
 #' ## Data source
 #'
 #' From the InductiveHealth ESSENCE user guide:
@@ -38,6 +45,9 @@
 #' There are `r length(ess_dd_vars)` fields available to specify in
 #' `dd_fields`. Call `ess_dd_vars` for the full list.
 #'
+#' Use `dd_fields = "EssenceID"` to ensure that individual records are returned.
+#' Otherwise, it appears that summarized data is returned.
+#'
 #' @param data_source Either `"hospital"` or `"patient"`.
 #' @param time_resolution Can be `"daily"` (the default), `"weekly"`,
 #' `"monthly"`, `"quarterly"`, or `"yearly"`.
@@ -55,7 +65,8 @@
 #' @param dd_fields A vector of data details fields to pull. `NULL` returns all
 #' available fields. If not `NULL`, "EssenceID" is added to prevent aggregation
 #' of data.
-#' @param free_vars A list of field and value pairs not covered by another argument to add to the query URL, e.g., `list(cDeath = "yes")`.
+#' @param free_vars A list of field and value pairs not covered by another
+#' argument to add to the query URL, e.g., `list(hasBeenE = 1, cDeath = "yes")`.
 #' @param user_id An ESSENCE user ID (numeric or character). This can be found
 #' by creating a query in the ESSENCE software online. The ID follows the
 #' "userId" field.
@@ -87,7 +98,8 @@
 #'   start = Sys.Date() - 30,
 #'   data_source = "hospital",
 #'   output = "ts",
-#'   regions = c("Cass", "Clay", "Jackson", "Platte")
+#'   regions = c("Cass", "Clay", "Jackson", "Platte"),
+#'   free_vars = list(hasBeenE = 1)
 #' )
 #'
 ess_build_url <- function(
@@ -124,10 +136,7 @@ ess_build_url <- function(
       dd_fields <- utils::URLencode(dd_fields)
 
       params_out <- paste(
-        c(
-          "aqtTarget=DataDetails",
-          paste0("field=", c(dd_fields, "EssenceID"))
-        ),
+        c("aqtTarget=DataDetails", paste0("field=", dd_fields)),
         collapse = "&"
       )
     }
@@ -147,7 +156,11 @@ ess_build_url <- function(
   }
 
   # Geography
-  if (!is.null(regions) & is.null(hospitals) & is.null(zipcodes)) {
+  if (
+    !is.null(regions) &
+      is.null(hospitals) &
+      is.null(zipcodes)
+  ) {
     if (data_source == "hospital") {
       rgn <- "hospitalregion"
     } else if (data_source == "patient") {
@@ -162,7 +175,11 @@ ess_build_url <- function(
       ),
       sep = "&"
     )
-  } else if (data_source == "hospital" & is.null(regions) & !is.null(hospitals)) {
+  } else if (
+    data_source == "hospital" &
+      is.null(regions) &
+      !is.null(hospitals)
+  ) {
     params_geo <- paste(
       "geographySystem=hospital",
       paste(
@@ -171,7 +188,11 @@ ess_build_url <- function(
       ),
       sep = "&"
     )
-  } else if (data_source == "patient" & is.null(regions) & !is.null(zipcodes)) {
+  } else if (
+    data_source == "patient" &
+      is.null(regions) &
+      !is.null(zipcodes)
+  ) {
     params_geo <- paste(
       "geographySystem=zipcode",
       paste0("geography=", paste(zipcodes, collapse = ",")),
@@ -206,7 +227,6 @@ ess_build_url <- function(
     paste0("endDate=", format(end, "%d%b%Y")),
     "percentParam=noPercent",
     detector,
-    "hasBeenE=1",
     sep = "&"
   )
 
