@@ -4,11 +4,14 @@
 \alias{ess_get_data}
 \title{Get data from the ESSENCE API}
 \usage{
-ess_get_data(url)
+ess_get_data(url, fix_colnames = TRUE)
 }
 \arguments{
 \item{url}{A URL formatted to query the ESSENCE API for data details or time
 series.}
+
+\item{fix_colnames}{Logical: Use \code{\link[=fix_colnames]{fix_colnames()}} to standardize column names
+in the output?}
 }
 \value{
 A dataframe.

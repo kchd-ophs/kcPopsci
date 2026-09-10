@@ -14,6 +14,8 @@
 #'
 #' @param url A URL formatted to query the ESSENCE API for data details or time
 #' series.
+#' @param fix_colnames Logical: Use [fix_colnames()] to standardize column names
+#' in the output?
 #'
 #' @inheritSection ess_build_url Rnssp package
 #'
@@ -45,36 +47,33 @@
 #' df <- ess_get_data(url)
 #' }
 #'
-ess_get_data <- function(url) {
-  pkg1 <- requireNamespace("Rnssp", quietly = TRUE)
+ess_get_data <- function(url, fix_colnames = TRUE) {
+  pkg <- requireNamespace("Rnssp", quietly = TRUE)
 
-  pkg2 <- requireNamespace("readr", quietly = TRUE)
-
-  if (!pkg1 | !pkg2) {
-    stop("The Rnssp and readr packages must be installed to use this function")
+  if (!pkg) {
+    stop("The Rnssp package must be installed to use this function")
   }
 
   if (grepl("aqtTarget=DataDetails", url)) {
-    Rnssp::get_api_data(
-      url,
-      fromCSV = TRUE,
-      col_types = readr::cols(.default = "c"),
-      name_repair = fix_colnames
-    )
+    df <- ess_query_api(url, csv = TRUE)
   } else if (grepl("aqtTarget=TimeSeries", url)) {
-    ls <- Rnssp::get_api_data(url)
+    ls <- ess_query_api(url, csv = FALSE)
 
     df <- ls$timeSeriesData
-
-    colnames(df) <- fix_colnames(colnames(df))
-
-    df$date <- as.Date(df$date)
-
-    df
   } else {
     stop(paste(
       "`url` should be formatted to query the ESSENCE API for either",
       "data details or time series"
     ))
   }
+
+  if (fix_colnames) {
+    colnames(df) <- fix_colnames(colnames(df))
+  }
+
+  df
+}
+
+ess_query_api <- function(url, csv) {
+  Rnssp::get_api_data(url, fromCSV = csv)
 }
