@@ -64,6 +64,6 @@ Other essence helpers:
 \code{\link[=ess_build_url]{ess_build_url()}},
 \code{\link{ess_dd_vars}},
 \code{\link[=ess_plot_ts]{ess_plot_ts()}},
-\code{\link{kc_hospitals}}
+\code{\link{hospitals}}
 }
 \concept{essence helpers}
