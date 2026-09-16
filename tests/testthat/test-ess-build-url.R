@@ -1,4 +1,4 @@
-test_that("ts, hospital", {
+test_that("ts, hospital regions", {
   date <- as.Date("2026-07-01")
 
   act <- ess_build_url(
@@ -8,7 +8,8 @@ test_that("ts, hospital", {
     end = date,
     data_source = "hospital",
     output = "ts",
-    regions = c("Cass", "Clay", "Jackson", "Platte")
+    regions = c("Cass", "Clay", "Jackson", "Platte"),
+    free_vars = list(hasBeenE = 1)
   )
 
   exp <- paste0(
@@ -36,6 +37,43 @@ test_that("ts, hospital", {
   expect_equal(act, exp)
 })
 
+test_that("ts, hospital IDs", {
+  date <- as.Date("2026-07-01")
+
+  act <- ess_build_url(
+    user_id = 1234,
+    syndrome = "syndromefield=somesyndrome",
+    start = date - 30,
+    end = date,
+    data_source = "hospital",
+    output = "ts",
+    hospital_ids = ess_hospitals$essence_id[1:2],
+    free_vars = list(hasBeenE = 1)
+  )
+
+  exp <- paste0(
+    "https://moessence.inductivehealth.com/ih_essence/api/timeSeries?",
+    paste(
+      "aqtTarget=TimeSeries",
+      "datasource=va_hosp",
+      "geographySystem=hospital",
+      "geography=MOBatesCountyERCC",
+      "geography=MOResearchBeltonERCC",
+      "userId=1234",
+      "timeResolution=daily",
+      "startDate=01Jun2026",
+      "endDate=01Jul2026",
+      "percentParam=noPercent",
+      "detector=probrepswitch",
+      "hasBeenE=1",
+      "syndromefield=somesyndrome",
+      sep = "&"
+    )
+  )
+
+  expect_equal(act, exp)
+})
+
 test_that("ts, patient", {
   date <- as.Date("2026-07-01")
 
@@ -46,7 +84,8 @@ test_that("ts, patient", {
     end = date,
     data_source = "patient",
     output = "ts",
-    regions = c("Cass", "Clay")
+    regions = c("Cass", "Clay"),
+    free_vars = list(hasBeenE = 1)
   )
 
   exp <- paste0(
@@ -82,7 +121,8 @@ test_that("ts, patient, zipcodes provided", {
     end = date,
     data_source = "patient",
     output = "ts",
-    zipcodes = c("64053", "64101", "64102", "64105", "64106")
+    zipcodes = c("64053", "64101", "64102", "64105", "64106"),
+    free_vars = list(hasBeenE = 1)
   )
 
   exp <- paste0(
@@ -117,7 +157,8 @@ test_that("dd, hospital, `dd_fields` is NULL", {
     end = date,
     data_source = "hospital",
     output = "dd",
-    regions = c("Jackson", "Platte")
+    regions = c("Jackson", "Platte"),
+    free_vars = list(hasBeenE = 1)
   )
 
   exp <- paste0(
@@ -154,7 +195,8 @@ test_that("dd, hospital, `dd_fields` is populated", {
     data_source = "hospital",
     output = "dd",
     regions = c("Cass", "Clay", "Jackson", "Platte"),
-    dd_fields = c("Date", "HospitalName", "HasBeenE")
+    dd_fields = c("Date", "HospitalName", "HasBeenE", "EssenceID"),
+    free_vars = list(hasBeenE = 1)
   )
 
   exp <- paste0(
@@ -178,46 +220,6 @@ test_that("dd, hospital, `dd_fields` is populated", {
       "percentParam=noPercent",
       "detector=probrepswitch",
       "hasBeenE=1",
-      "syndromefield=somesyndrome",
-      sep = "&"
-    )
-  )
-
-  expect_equal(act, exp)
-})
-
-test_that("`free_vars` used", {
-  date <- as.Date("2026-07-01")
-
-  act <- ess_build_url(
-    user_id = 1234,
-    syndrome = "syndromefield=somesyndrome",
-    start = date - 30,
-    end = date,
-    data_source = "hospital",
-    output = "ts",
-    regions = c("Cass", "Clay", "Jackson", "Platte"),
-    free_vars = list(one = "apple", two = "banana")
-  )
-
-  exp <- paste0(
-    "https://moessence.inductivehealth.com/ih_essence/api/timeSeries?",
-    paste(
-      "aqtTarget=TimeSeries",
-      "datasource=va_hosp",
-      "geographySystem=hospitalregion",
-      "geography=mo_cass",
-      "geography=mo_clay",
-      "geography=mo_jackson",
-      "geography=mo_platte",
-      "userId=1234",
-      "timeResolution=daily",
-      "startDate=01Jun2026",
-      "endDate=01Jul2026",
-      "percentParam=noPercent",
-      "detector=probrepswitch",
-      "hasBeenE=1",
-      "one=apple&two=banana",
       "syndromefield=somesyndrome",
       sep = "&"
     )

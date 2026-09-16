@@ -21,8 +21,8 @@ Field names for ESSENCE data details output. These can be provided to the
 Other essence helpers:
 \code{\link[=ess_build_url]{ess_build_url()}},
 \code{\link[=ess_get_data]{ess_get_data()}},
-\code{\link[=ess_plot_ts]{ess_plot_ts()}},
-\code{\link{kc_hospitals}}
+\code{\link{ess_hospitals}},
+\code{\link[=ess_plot_ts]{ess_plot_ts()}}
 }
 \concept{essence helpers}
 \keyword{datasets}

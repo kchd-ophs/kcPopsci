@@ -1,0 +1,22 @@
+essence_name,essence_id,name,street,city,state,zip,kc
+BATES COUNTY MEMORIAL HOSPITAL,MOBatesCountyERCC,Bates County Memorial Hospital,615 West Nursery Street,Butler,MO,64730,FALSE
+BELTON REGIONAL MEDICAL CENTER,MOResearchBeltonERCC,Belton Regional Medical Center,17065 US-71,Belton,MO,64012,FALSE
+CAMERON REGIONAL MEDICAL CENTER,MOCameronERCC,Cameron Regional Medical Center,1600 East Evergreen Street,Cameron,MO,64429,FALSE
+CENTERPOINT MEDICAL CENTER,MOCenterpointERCC,Centerpoint Medical Center,19600 East 39th Street S,Independence,MO,64057,FALSE
+CHILDREN'S MERCY - EAST,MOChildrensMercyEastERCC,Children's Mercy East,20300 East Valley View Parkway,Independence,MO,64057,FALSE
+CHILDREN'S MERCY - NORTHLAND,MOChildrensMercyNorthlandERCC,Children's Mercy Northland,501 NW Barry Road,Kansas City,MO,64155,TRUE
+CHILDREN'S MERCY HOSPITAL,MOChildrensMercyERCC,Children's Mercy Hospital,2401 Gillham Road,Kansas City,MO,64108,TRUE
+EXCELSIOR SPRINGS HOSPITAL,MOExcelsiorERCC,Excelsior Springs Hospital,1700 Rainbow Boulevard,Excelsior Springs,MO,64024,FALSE
+LAFAYETTE REGIONAL HEALTH CENTER,MOLafayetteERCC,Lafayette Regional Health Center,1500 State Street,Lexington,MO,64067,FALSE
+LEE'S SUMMIT MEDICAL CENTER,MOLeesSummitERCC,Lee's Summit Medical Center,2100 SE Blue Parkway,Lee's Summit,MO,64063,FALSE
+LIBERTY HOSPITAL,MOLibertyERCC,Liberty Hospital,2525 Glenn Hendren Drive,Liberty,MO,64068,FALSE
+NORTH KANSAS CITY HOSPITAL,MONothKCERCC,North Kansas City Hospital,2800 Clay Edwards Drive,North Kansas City,MO,64116,FALSE
+RAY CO MEMORIAL HOSPITAL,MORayCountyERCC,Ray County Memorial Hospital,904 Wollard Boulevard,Richmond,MO,64085,FALSE
+RESEARCH MEDICAL CENTER,MOResearchKCERCC,Research Medical Center,2316 East Meyer Boulevard,Kansas City,MO,64132,TRUE
+ST. JOSEPH MEDICAL CENTER,MOStJosephKCERCC,St. Joseph Medical Center,1000 Carondelet Drive,Kansas City,MO,64114,TRUE
+ST. LUKE'S EAST HOSPITAL,MOStLukesEastERCC,St. Luke's East Hospital,100 NE Saint Luke's Boulevard,Lee's Summit,MO,64086,FALSE
+ST. LUKE'S HOSPITAL OF KANSAS CITY,MOStLukesKCERCC,St. Luke's Hospital of Kansas City,4401 Wornall Road,Kansas City,MO,64111,TRUE
+ST. LUKE'S NORTH HOSPITAL,MOStLukesNorthlandKCERCC,St. Luke's North Hospital,5830 NW Barry Road,Kansas City,MO,64154,TRUE
+ST. MARY'S HOSPITAL OF BLUE SPRINGS,MOStMarysBlueSpringsERCC,St. Mary's Medical Center,201 NW R.D. Mize Road,Blue Springs,MO,64014,FALSE
+UNIVERSITY HEALTH LAKEWOOD MEDICAL CENTER,MOTrumanLakewoodERCC,University Health Lakewood Medical Center,7900 Lee's Summit Road,Kansas City,MO,64139,TRUE
+UNIVERSITY HEALTH TRUMAN MEDICAL CENTER,MOTrumanHospitalHillERCC,University Health Truman Medical Center,2301 Holmes Street,Kansas City,MO,64108,TRUE

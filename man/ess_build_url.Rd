@@ -11,7 +11,7 @@ ess_build_url(
   end = Sys.Date(),
   syndrome = NULL,
   regions = NULL,
-  hospitals = NULL,
+  hospital_ids = NULL,
   zipcodes = NULL,
   output = c("dd", "ts"),
   dd_fields = NULL,
@@ -34,8 +34,8 @@ defaults to \code{Sys.Date()}.}
 \item{regions}{A vector of county names (case insensitive; omit the word
 "county").}
 
-\item{hospitals}{A vector of hospitals. Only used if
-\code{datasource = "hospital"}.}
+\item{hospital_ids}{A vector of ESSENCE hospital IDs (see \link{ess_hospitals}).
+Only used if \code{datasource = "hospital"}.}
 
 \item{zipcodes}{A vector of ZIP codes (numeric or character). Only used if
 \code{data_source = "patient"}.}
@@ -46,7 +46,8 @@ defaults to \code{Sys.Date()}.}
 available fields. If not \code{NULL}, "EssenceID" is added to prevent aggregation
 of data.}
 
-\item{free_vars}{A list of field and value pairs not covered by another argument to add to the query URL, e.g., \code{list(cDeath = "yes")}.}
+\item{free_vars}{A list of field and value pairs not covered by another
+argument to add to the query URL, e.g., \code{list(hasBeenE = 1, cDeath = "yes")}.}
 
 \item{user_id}{An ESSENCE user ID (numeric or character). This can be found
 by creating a query in the ESSENCE software online. The ID follows the
@@ -60,6 +61,14 @@ This function creates a URL (or a vector of URLs) to query the API for
 Missouri's InductiveHealth ESSENCE system.
 }
 \details{
+\subsection{"Has Been" filters}{
+
+By setting a "Has Been" filter to 1, only data for patients in that class
+will be returned. For example, if \code{free_vars = list(hasBeenE = 1)}, then
+records will be limited to patients who were seen in the emergency
+department.
+}
+
 \subsection{Data source}{
 
 From the InductiveHealth ESSENCE user guide:
@@ -78,9 +87,10 @@ jurisdiction, regardless of patient residence."
 \subsection{Geography}{
 
 When \code{data_source = "hospital"}, hospitals can be selected by county using
-the \code{regions} argument or by hospital using the \code{hospitals} argument. When
-\code{data_source = "patient"}, the area of residence can be selected by county
-using the \code{regions} argument or by ZIP code using the \code{zipcodes} argument.
+the \code{regions} argument or by hospital ID using the \code{hospital_ids} argument.
+When \code{data_source = "patient"}, the area of residence can be selected by
+county using the \code{regions} argument or by ZIP code using the \code{zipcodes}
+argument.
 
 The following counties in northwest Missouri are available to KCHD ESSENCE
 users: Andrew, Atchison, Bates, Benton, Buchanan, Caldwell, Carroll, Cass,
@@ -93,6 +103,9 @@ Ray, Saline, and Worth.
 
 There are 203 fields available to specify in
 \code{dd_fields}. Call \code{ess_dd_vars} for the full list.
+
+Use \code{dd_fields = "EssenceID"} to ensure that individual records are returned.
+Otherwise, it appears that summarized data is returned.
 }
 }
 \section{Rnssp package}{
@@ -120,7 +133,8 @@ ess_build_url(
   start = Sys.Date() - 30,
   data_source = "hospital",
   output = "ts",
-  regions = c("Cass", "Clay", "Jackson", "Platte")
+  regions = c("Cass", "Clay", "Jackson", "Platte"),
+  free_vars = list(hasBeenE = 1)
 )
 
 }
@@ -128,7 +142,7 @@ ess_build_url(
 Other essence helpers:
 \code{\link{ess_dd_vars}},
 \code{\link[=ess_get_data]{ess_get_data()}},
-\code{\link[=ess_plot_ts]{ess_plot_ts()}},
-\code{\link{kc_hospitals}}
+\code{\link{ess_hospitals}},
+\code{\link[=ess_plot_ts]{ess_plot_ts()}}
 }
 \concept{essence helpers}
