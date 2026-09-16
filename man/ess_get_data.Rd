@@ -63,7 +63,7 @@ df <- ess_get_data(url)
 Other essence helpers:
 \code{\link[=ess_build_url]{ess_build_url()}},
 \code{\link{ess_dd_vars}},
-\code{\link[=ess_plot_ts]{ess_plot_ts()}},
-\code{\link{hospitals}}
+\code{\link{ess_hospitals}},
+\code{\link[=ess_plot_ts]{ess_plot_ts()}}
 }
 \concept{essence helpers}

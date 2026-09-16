@@ -30,9 +30,10 @@
 #' ## Geography
 #'
 #' When `data_source = "hospital"`, hospitals can be selected by county using
-#' the `regions` argument or by hospital using the `hospitals` argument. When
-#' `data_source = "patient"`, the area of residence can be selected by county
-#' using the `regions` argument or by ZIP code using the `zipcodes` argument.
+#' the `regions` argument or by hospital ID using the `hospital_ids` argument.
+#' When `data_source = "patient"`, the area of residence can be selected by
+#' county using the `regions` argument or by ZIP code using the `zipcodes`
+#' argument.
 #'
 #' The following counties in northwest Missouri are available to KCHD ESSENCE
 #' users: Andrew, Atchison, Bates, Benton, Buchanan, Caldwell, Carroll, Cass,
@@ -57,8 +58,8 @@
 #' `"medicalGroupingSystem=<grouping name>&<query category>=<query name>"`.
 #' @param regions A vector of county names (case insensitive; omit the word
 #' "county").
-#' @param hospitals A vector of hospitals. Only used if
-#' `datasource = "hospital"`.
+#' @param hospital_ids A vector of ESSENCE hospital IDs (see [ess_hospitals]).
+#' Only used if `datasource = "hospital"`.
 #' @param zipcodes A vector of ZIP codes (numeric or character). Only used if
 #' `data_source = "patient"`.
 #' @param output Either `"dd"` (for data details) or `"ts"` (for time series).
@@ -109,7 +110,7 @@ ess_build_url <- function(
     end = Sys.Date(),
     syndrome = NULL,
     regions = NULL,
-    hospitals = NULL,
+    hospital_ids = NULL,
     zipcodes = NULL,
     output = c("dd", "ts"),
     dd_fields = NULL,
@@ -158,7 +159,7 @@ ess_build_url <- function(
   # Geography
   if (
     !is.null(regions) &
-      is.null(hospitals) &
+      is.null(hospital_ids) &
       is.null(zipcodes)
   ) {
     if (data_source == "hospital") {
@@ -178,12 +179,12 @@ ess_build_url <- function(
   } else if (
     data_source == "hospital" &
       is.null(regions) &
-      !is.null(hospitals)
+      !is.null(hospital_ids)
   ) {
     params_geo <- paste(
       "geographySystem=hospital",
       paste(
-        paste0("geography=", hospitals),
+        paste0("geography=", hospital_ids),
         collapse = "&"
       ),
       sep = "&"

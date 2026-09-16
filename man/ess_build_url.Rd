@@ -11,7 +11,7 @@ ess_build_url(
   end = Sys.Date(),
   syndrome = NULL,
   regions = NULL,
-  hospitals = NULL,
+  hospital_ids = NULL,
   zipcodes = NULL,
   output = c("dd", "ts"),
   dd_fields = NULL,
@@ -34,8 +34,8 @@ defaults to \code{Sys.Date()}.}
 \item{regions}{A vector of county names (case insensitive; omit the word
 "county").}
 
-\item{hospitals}{A vector of hospitals. Only used if
-\code{datasource = "hospital"}.}
+\item{hospital_ids}{A vector of ESSENCE hospital IDs (see \link{ess_hospitals}).
+Only used if \code{datasource = "hospital"}.}
 
 \item{zipcodes}{A vector of ZIP codes (numeric or character). Only used if
 \code{data_source = "patient"}.}
@@ -87,9 +87,10 @@ jurisdiction, regardless of patient residence."
 \subsection{Geography}{
 
 When \code{data_source = "hospital"}, hospitals can be selected by county using
-the \code{regions} argument or by hospital using the \code{hospitals} argument. When
-\code{data_source = "patient"}, the area of residence can be selected by county
-using the \code{regions} argument or by ZIP code using the \code{zipcodes} argument.
+the \code{regions} argument or by hospital ID using the \code{hospital_ids} argument.
+When \code{data_source = "patient"}, the area of residence can be selected by
+county using the \code{regions} argument or by ZIP code using the \code{zipcodes}
+argument.
 
 The following counties in northwest Missouri are available to KCHD ESSENCE
 users: Andrew, Atchison, Bates, Benton, Buchanan, Caldwell, Carroll, Cass,
@@ -141,7 +142,7 @@ ess_build_url(
 Other essence helpers:
 \code{\link{ess_dd_vars}},
 \code{\link[=ess_get_data]{ess_get_data()}},
-\code{\link[=ess_plot_ts]{ess_plot_ts()}},
-\code{\link{hospitals}}
+\code{\link{ess_hospitals}},
+\code{\link[=ess_plot_ts]{ess_plot_ts()}}
 }
 \concept{essence helpers}

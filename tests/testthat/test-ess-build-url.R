@@ -1,4 +1,4 @@
-test_that("ts, hospital", {
+test_that("ts, hospital regions", {
   date <- as.Date("2026-07-01")
 
   act <- ess_build_url(
@@ -22,6 +22,43 @@ test_that("ts, hospital", {
       "geography=mo_clay",
       "geography=mo_jackson",
       "geography=mo_platte",
+      "userId=1234",
+      "timeResolution=daily",
+      "startDate=01Jun2026",
+      "endDate=01Jul2026",
+      "percentParam=noPercent",
+      "detector=probrepswitch",
+      "hasBeenE=1",
+      "syndromefield=somesyndrome",
+      sep = "&"
+    )
+  )
+
+  expect_equal(act, exp)
+})
+
+test_that("ts, hospital IDs", {
+  date <- as.Date("2026-07-01")
+
+  act <- ess_build_url(
+    user_id = 1234,
+    syndrome = "syndromefield=somesyndrome",
+    start = date - 30,
+    end = date,
+    data_source = "hospital",
+    output = "ts",
+    hospital_ids = ess_hospitals$essence_id[1:2],
+    free_vars = list(hasBeenE = 1)
+  )
+
+  exp <- paste0(
+    "https://moessence.inductivehealth.com/ih_essence/api/timeSeries?",
+    paste(
+      "aqtTarget=TimeSeries",
+      "datasource=va_hosp",
+      "geographySystem=hospital",
+      "geography=MOBatesCountyERCC",
+      "geography=MOResearchBeltonERCC",
       "userId=1234",
       "timeResolution=daily",
       "startDate=01Jun2026",

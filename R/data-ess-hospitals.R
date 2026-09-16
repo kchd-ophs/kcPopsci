@@ -1,9 +1,9 @@
-#' Kansas City hospitals
+#' Kansas City metro area hospitals
 #'
-#' All hospitals located in Kansas City.
+#' Hospitals in the Kansas City metro area contributing to ESSENCE.
 #'
-#' @format A dataframe with `r nrow(hospitals)` rows and
-#' `r ncol(hospitals)` columns.
+#' @format A dataframe with `r nrow(ess_hospitals)` rows and
+#' `r ncol(ess_hospitals)` columns.
 #' \describe{
 #'    \item{essence_name}{Hospital name as it appears in ESSENCE}
 #'    \item{essence_id}{ESSENCE API ID value, for use in `hospitals` argument
@@ -21,4 +21,4 @@
 #'
 #' @family essence helpers
 #'
-"hospitals"
+"ess_hospitals"

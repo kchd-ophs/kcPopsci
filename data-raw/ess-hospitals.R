@@ -1,4 +1,4 @@
-# Create `hospitals`
+# Create `ess_hospitals`
 
 library(tidygeocoder)
 
@@ -14,7 +14,7 @@ geo <- geocode(
   full_results = TRUE
 )
 
-hospitals <- geo |>
+ess_hospitals <- geo |>
   dplyr::select(
     essence_name, essence_id, name, kc, lat, long,
     street = attributes.StAddr,
@@ -25,4 +25,4 @@ hospitals <- geo |>
   ) |>
   dplyr::mutate(county = sub(" County", "", county))
 
-usethis::use_data(hospitals, overwrite = TRUE)
+usethis::use_data(ess_hospitals, overwrite = TRUE)
