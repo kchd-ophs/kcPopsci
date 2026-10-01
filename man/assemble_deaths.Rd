@@ -17,7 +17,7 @@ indicating death counts. The first row should be the age bin from 0-1.}
 (e.g. race, geography, year).}
 
 \item{breaks}{either "lifex5" or "lifex10", indicating the age bin width to
-pass to bin_ages(). If not provided, will use "lifex10"}
+pass to \code{\link[=bin_values]{bin_values()}}. If not provided, will use "lifex10"}
 }
 \value{
 A data frame/data frame extension (e.g. a tibble) with counts of

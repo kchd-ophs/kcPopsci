@@ -1,5 +1,5 @@
 test_that("2-year bins", {
-  act <- bin_ages(seq(0, 5, .5), breaks = seq(0, 5, 2))
+  act <- bin_values(seq(0, 5, .5), breaks = seq(0, 5, 2))
 
   exp <- as.factor(c(rep("0-1", 4), rep("2-3", 4), rep("4+", 3)))
 
@@ -7,7 +7,7 @@ test_that("2-year bins", {
 })
 
 test_that("variable size bins", {
-  act <- bin_ages(seq(0, 5, .5), breaks = c(0, 2, 3))
+  act <- bin_values(seq(0, 5, .5), breaks = c(0, 2, 3))
 
   exp <- as.factor(c(rep("0-1", 4), rep("2", 2), rep("3+", 5)))
 
@@ -15,7 +15,7 @@ test_that("variable size bins", {
 })
 
 test_that("lifex5", {
-  act <- bin_ages(0:100, breaks = "lifex5")
+  act <- bin_values(0:100, breaks = "lifex5")
 
   exp <- c(
     "0", rep("1-4", 4), rep("5-9", 5), rep("10-14", 5), rep("15-19", 5),
@@ -31,7 +31,7 @@ test_that("lifex5", {
 })
 
 test_that("lifex10", {
-  act <- bin_ages(0:100, breaks = "lifex10")
+  act <- bin_values(0:100, breaks = "lifex10")
 
   exp <- c(
     "0", rep("1-4", 4), rep("5-14", 10), rep("15-24", 10), rep("25-34", 10),
@@ -46,7 +46,7 @@ test_that("lifex10", {
 
 test_that("`breaks` error", {
   expect_error(
-    bin_ages(0:100, breaks = "?"),
+    bin_values(0:100, breaks = "?"),
     "Invalid `breaks` value. See function documentation."
   )
 })

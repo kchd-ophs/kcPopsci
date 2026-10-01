@@ -1,38 +1,36 @@
-#' Make age bins
+#' Bin numeric values
 #'
-#' @description
-#' Input ages and return age bins.
-#'
-#' @param x A numeric vector of ages.
-#' @param breaks A numeric vector determining the lower bounds for age bins.
-#' `"lifex5"` or `"lifex10"` returns age bins specific to life expectancy
-#' calculations consisting mainly of either 5- or 10-year intervals.
+#' @param x A numeric vector.
+#' @param breaks A numeric vector of unique values that determine the lower
+#' bound for each bin. For life expectancy calculations, `"lifex5"` or
+#' `"lifex10"` returns a specific set of age bins consisting mainly of either
+#' 5- or 10-year intervals.
 #'
 #' @returns A factor vector the same length as `x`.
 #' @export
 #'
 #' @examples
-#' ages <- seq(.5, 10, .5)
+#' n <- seq(.5, 10, .5)
 #'
-#' # 5-year bins
+#' # Bins of width 5
 #' data.frame(
-#'   age = ages,
-#'   bin = bin_ages(ages, breaks = seq(0, 10, 5))
+#'   n = n,
+#'   bin = bin_values(n, breaks = seq(0, 10, 5))
 #' )
 #'
 #' # Variable size bins
 #' data.frame(
-#'   age = ages,
-#'   bin = bin_ages(ages, breaks = c(0, 3, 4, 5, 9))
+#'   n = n,
+#'   bin = bin_values(n, breaks = c(0, 3, 4, 5, 9))
 #' )
 #'
 #' # 10-year bins for life expectancy calculations
 #' data.frame(
 #'   age = 0:100,
-#'   bin = bin_ages(0:100, breaks = "lifex10")
+#'   bin = bin_values(0:100, breaks = "lifex10")
 #' )
 #'
-bin_ages <- function(x, breaks) {
+bin_values <- function(x, breaks) {
   if (length(breaks) == 1 && breaks == "lifex5") {
     breaks <- c(0, 1, seq(5, 85, 5))
   } else if (length(breaks) == 1 && breaks == "lifex10") {
@@ -54,5 +52,11 @@ bin_ages <- function(x, breaks) {
 
   lbl <- sub("-Inf", "+", lbl)
 
-  cut(x, breaks = breaks, labels = lbl, include.lowest = TRUE, right = FALSE)
+  cut(
+    x,
+    breaks = breaks,
+    labels = lbl,
+    include.lowest = TRUE,
+    right = FALSE
+  )
 }

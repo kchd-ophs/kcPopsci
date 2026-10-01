@@ -12,7 +12,7 @@
 #' @param ... Additional subgroups to be used for life expectancy calculation
 #' (e.g. race, geography, year).
 #' @param breaks either "lifex5" or "lifex10", indicating the age bin width to
-#' pass to bin_ages(). If not provided, will use "lifex10"
+#' pass to [bin_values()]. If not provided, will use "lifex10"
 #'
 #' @export
 #' @returns A data frame/data frame extension (e.g. a tibble) with counts of
@@ -42,7 +42,7 @@ assemble_deaths <- function(deaths, age_col, ...,
   print(breaks)
 
   deaths |>
-    mutate(age_bin=bin_ages({{age_col}}, breaks = breaks)) |>
+    mutate(age_bin=bin_values({{age_col}}, breaks = breaks)) |>
     count(.data$age_bin, ...) |>
     complete(.data$age_bin, ...) |>
     mutate(n=replace_na(n,0)) |>
