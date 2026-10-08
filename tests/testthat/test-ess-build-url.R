@@ -162,7 +162,7 @@ test_that("dd, hospital, `dd_fields` is NULL", {
   )
 
   exp <- paste0(
-    "https://moessence.inductivehealth.com/ih_essence/api/dataDetails/csv?",
+    "https://moessence.inductivehealth.com/ih_essence/api/dataDetails?",
     paste(
       "aqtTarget=DataDetails",
       "datasource=va_hosp",
@@ -200,7 +200,7 @@ test_that("dd, hospital, `dd_fields` is populated", {
   )
 
   exp <- paste0(
-    "https://moessence.inductivehealth.com/ih_essence/api/dataDetails/csv?",
+    "https://moessence.inductivehealth.com/ih_essence/api/dataDetails?",
     paste(
       "aqtTarget=DataDetails",
       "field=Date",

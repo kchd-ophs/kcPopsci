@@ -4,7 +4,7 @@ devtools::load_all()
 
 load("path/to/myProfile.rda") # path to Essence credentials here
 
-id <- NA # user ID here
+id <- Sys.getenv("ESSENCE_USER_ID") # user ID here
 
 replace_data <- function(df) {
   df <- df[1, ]
@@ -35,19 +35,21 @@ url <- ess_build_url(
   user_id = id
 )
 
-dd_mock <- ess_query_api(url, csv = TRUE)
+dd_mock <- ess_query_api(url)
 
-dd1 <- ess_get_data(url)
+dd_mock$dataDetails <- replace_data(dd_mock$dataDetails)
 
-dd2 <- ess_get_data(url, fix_colnames = FALSE)
+dd1 <- ess_get_data(url) |>
+  replace_data()
+
+dd2 <- ess_get_data(url, fix_colnames = FALSE) |>
+  replace_data()
 
 dd <- list(
   mock = dd_mock,
   mod_colnames = dd1,
   orig_colnames = dd2
 )
-
-dd <- lapply(dd, replace_data)
 
 # Test time series
 url <- ess_build_url(
@@ -60,13 +62,15 @@ url <- ess_build_url(
   user_id = id
 )
 
-ts_mock <- ess_query_api(url, csv = FALSE)
+ts_mock <- ess_query_api(url)
 
 ts_mock$timeSeriesData <- replace_data(ts_mock$timeSeriesData)
 
-ts1 <- replace_data(ess_get_data(url))
+ts1 <- ess_get_data(url) |>
+  replace_data()
 
-ts2 <- replace_data(ess_get_data(url, fix_colnames = FALSE))
+ts2 <- ess_get_data(url, fix_colnames = FALSE) |>
+  replace_data()
 
 ts <- list(
   mock = ts_mock,
@@ -75,6 +79,9 @@ ts <- list(
 )
 
 # Save
-ls <- list(dd = dd, ts = ts)
+ls <- list(
+  dd = dd,
+  ts = ts
+)
 
 saveRDS(ls, "tests/testthat/fixtures/data_ess_get_data.rds")

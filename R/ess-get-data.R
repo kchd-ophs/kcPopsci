@@ -33,12 +33,13 @@
 #' )
 #'
 #' url <- ess_build_url(
-#'   user_id = 1234,
-#'   syndrome = syn,
-#'   start = Sys.Date() - 30,
 #'   data_source = "hospital",
+#'   start = Sys.Date() - 30,
+#'   syndrome = syn,
+#'   regions = c("Cass", "Clay", "Jackson", "Platte"),
 #'   output = "ts",
-#'   regions = c("Cass", "Clay", "Jackson", "Platte")
+#'   free_vars = list(hasBeenE = 1),
+#'   user_id = 1234
 #' )
 #'
 #' load("path/to/myProfile.rda")
@@ -54,11 +55,11 @@ ess_get_data <- function(url, fix_colnames = TRUE) {
     stop("The Rnssp package must be installed to use this function")
   }
 
-  if (grepl("aqtTarget=DataDetails", url)) {
-    df <- ess_query_api(url, csv = TRUE)
-  } else if (grepl("aqtTarget=TimeSeries", url)) {
-    ls <- ess_query_api(url, csv = FALSE)
+  ls <- ess_query_api(url)
 
+  if (grepl("aqtTarget=DataDetails", url)) {
+    df <- ls$dataDetails
+  } else if (grepl("aqtTarget=TimeSeries", url)) {
     df <- ls$timeSeriesData
   } else {
     stop(paste(
@@ -74,6 +75,6 @@ ess_get_data <- function(url, fix_colnames = TRUE) {
   df
 }
 
-ess_query_api <- function(url, csv) {
-  Rnssp::get_api_data(url, fromCSV = csv)
+ess_query_api <- function(url) {
+  Rnssp::get_api_data(url)
 }

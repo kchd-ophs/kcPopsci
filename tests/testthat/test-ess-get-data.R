@@ -49,7 +49,7 @@ test_that("time series", {
   expect_equal(act, exp)
 })
 
-test_that("data details, orig colnames", {
+test_that("time series, orig colnames", {
   ls <- readRDS(test_path("fixtures", "data_ess_get_data.rds"))
   url <- ess_build_url(
     data_source = "patient",
