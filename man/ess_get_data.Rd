@@ -44,12 +44,13 @@ syn <- paste(
 )
 
 url <- ess_build_url(
-  user_id = 1234,
-  syndrome = syn,
-  start = Sys.Date() - 30,
   data_source = "hospital",
+  start = Sys.Date() - 30,
+  syndrome = syn,
+  regions = c("Cass", "Clay", "Jackson", "Platte"),
   output = "ts",
-  regions = c("Cass", "Clay", "Jackson", "Platte")
+  free_vars = list(hasBeenE = 1),
+  user_id = 1234
 )
 
 load("path/to/myProfile.rda")

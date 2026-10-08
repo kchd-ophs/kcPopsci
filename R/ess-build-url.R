@@ -94,13 +94,13 @@
 #' )
 #'
 #' ess_build_url(
-#'   user_id = 1234,
-#'   syndrome = syn,
-#'   start = Sys.Date() - 30,
 #'   data_source = "hospital",
-#'   output = "ts",
+#'   start = Sys.Date() - 30,
+#'   syndrome = syn,
 #'   regions = c("Cass", "Clay", "Jackson", "Platte"),
-#'   free_vars = list(hasBeenE = 1)
+#'   output = "ts",
+#'   free_vars = list(hasBeenE = 1),
+#'   user_id = 1234
 #' )
 #'
 ess_build_url <- function(
@@ -142,7 +142,7 @@ ess_build_url <- function(
       )
     }
 
-    op <- "dataDetails/csv?"
+    op <- "dataDetails?"
   } else if (output == "ts") {
     op <- "timeSeries?"
 
