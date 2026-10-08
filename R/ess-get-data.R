@@ -68,7 +68,7 @@ ess_get_data <- function(url, fix_colnames = TRUE) {
     ))
   }
 
-  if (fix_colnames) {
+  if (fix_colnames & is.data.frame(df)) {
     colnames(df) <- fix_colnames(colnames(df))
   }
 

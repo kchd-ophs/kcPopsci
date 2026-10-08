@@ -65,3 +65,19 @@ test_that("time series, orig colnames", {
   exp <- ls$ts$orig_colnames
   expect_equal(act, exp)
 })
+
+test_that("no records returned", {
+  url <- ess_build_url(
+    data_source = "patient",
+    time_resolution = "daily",
+    start = "2025-01-01",
+    end = "2025-01-01",
+    zipcodes = "64108",
+    output = "dd",
+    user_id = "****"
+  )
+  local_mocked_bindings(ess_query_api = function(...) list(list()))
+  act <- ess_get_data(url)
+  exp <- NULL
+  expect_equal(act, exp)
+})
