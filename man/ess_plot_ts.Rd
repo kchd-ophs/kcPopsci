@@ -27,8 +27,8 @@ static (via ggplot2)?}
 
 \item{width, height}{The plot dimensions in pixels. Only used if \code{interactive = TRUE}.}
 
-\item{wrap_years}{Logical: If the dataset contains multiple years, wrap the
-plot grouped by year using \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}?}
+\item{wrap_years}{Logical: If the dataset contains multiple years, should
+the plot be wrapped by year using \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}?}
 }
 \description{
 This function configures and plots a time series dataframe downloaded from

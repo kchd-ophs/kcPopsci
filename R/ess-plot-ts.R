@@ -12,8 +12,8 @@
 #' static (via ggplot2)?
 #' @param width,height The plot dimensions in pixels. Only used if `interactive
 #' = TRUE`.
-#' @param wrap_years Logical: If the dataset contains multiple years, wrap the
-#' plot grouped by year using [ggplot2::facet_wrap()]?
+#' @param wrap_years Logical: If the dataset contains multiple years, should
+#' the plot be wrapped by year using [ggplot2::facet_wrap()]?
 #'
 #' @inheritSection ess_build_url Rnssp package
 #'
@@ -70,9 +70,11 @@ ess_plot_ts <- function(
 
   pkg3 <- requireNamespace("plotly", quietly = TRUE)
 
+  pkg4 <- requireNamespace("ggtext", quietly = TRUE)
+
   if (!pkg1 | !pkg2 | !pkg3) {
     stop(paste(
-      "The ggplot2, scales, and plotly packages must be installed",
+      "The ggplot2, scales, plotly, and ggtext packages must be installed",
       "to use this function"
     ))
   }
@@ -94,7 +96,11 @@ ess_plot_ts <- function(
   } else {
     plot +
       ggplot2::labs(title = title) +
-      ggplot2::theme(plot.title = ggplot2::element_text(hjust = .5))
+      ggplot2::theme(
+        plot.title = ggtext::element_textbox_simple(
+          margin = ggplot2::margin(t = 10, b = 5)
+        )
+      )
   }
 }
 
@@ -150,36 +156,46 @@ ess_ts_ggplot <- function(df, alerts, wrap) {
   # Tooltip text
   if (alerts) {
     df$tt <- paste(
-      "<b>Date:</b>", format(df$date, "%b %d, %Y"),
-      "<br><b>Count:</b>", df$count,
-      "<br><b>Alert status:</b>", df$alert_status
+      "<b>Date:</b>",
+      format(df$date, "%b %d, %Y"),
+      "<br><b>Count:</b>",
+      df$count,
+      "<br><b>Alert status:</b>",
+      df$alert_status
     )
   } else {
     df$tt <- paste(
-      "<b>Date:</b>", format(df$date, "%b %d, %Y"),
-      "<br><b>Count:</b>", df$count
+      "<b>Date:</b>",
+      format(df$date, "%b %d, %Y"),
+      "<br><b>Count:</b>",
+      df$count
     )
   }
 
   if (wrap) {
-    p <- ggplot2::ggplot(df, ggplot2::aes(
-      x = .data$plot_date,
-      y = .data$count,
-      group = .data$year,
-      text = .data$tt
-    )) +
+    p <- ggplot2::ggplot(
+      df,
+      ggplot2::aes(
+        x = .data$plot_date,
+        y = .data$count,
+        group = .data$year,
+        text = .data$tt
+      )
+    ) +
       ggplot2::facet_wrap(~year, ncol = 1) +
       ggplot2::scale_x_date(date_labels = "%b")
   } else {
     df$gp <- 1
 
-    p <- ggplot2::ggplot(df, ggplot2::aes(
-      x = .data$date,
-      y = .data$count,
-      group = .data$gp,
-      text = .data$tt
-    )) +
-      ggplot2::scale_x_date(date_labels = "%b %Y")
+    p <- ggplot2::ggplot(
+      df,
+      ggplot2::aes(
+        x = .data$date,
+        y = .data$count,
+        group = .data$gp,
+        text = .data$tt
+      )
+    )
   }
 
   p <- p +
@@ -205,12 +221,18 @@ ess_ts_ggplot <- function(df, alerts, wrap) {
 
   p +
     ggplot2::scale_y_continuous(breaks = scales::breaks_pretty(n_breaks)) +
-    ggplot2::theme_minimal(base_size = 14) +
+    ggplot2::theme_minimal() +
     ggplot2::theme(
       panel.grid.major.x = ggplot2::element_line(color = "#ddd"),
       panel.grid.minor.x = ggplot2::element_blank(),
       panel.grid.major.y = ggplot2::element_line(color = "#ddd"),
-      panel.grid.minor.y = ggplot2::element_blank()
+      panel.grid.minor.y = ggplot2::element_blank(),
+      axis.title.x = ggplot2::element_text(
+        margin = ggplot2::margin(t = 10)
+      ),
+      axis.title.y = ggplot2::element_text(
+        margin = ggplot2::margin(r = 10)
+      )
     ) +
     ggplot2::labs(x = "Date", y = "Count")
 }
@@ -242,10 +264,13 @@ ess_ts_plotly <- function(
   if (!is.null(title)) {
     plot <- plot |>
       plotly::layout(
+        margin = list(t = 50),
         title = list(
           text = title,
-          automargin = TRUE,
-          pad = list(t = 5)
+          x = 0,
+          xanchor = "left",
+          y = 1.2,
+          yanchor = "bottom"
         )
       )
   }
