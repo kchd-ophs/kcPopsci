@@ -4,6 +4,7 @@ export(assemble_deaths)
 export(bin_values)
 export(calc_mortality_rate)
 export(check_eligibility)
+export(complete_missing_tracts)
 export(ess_build_url)
 export(ess_get_data)
 export(ess_plot_ts)
@@ -12,7 +13,10 @@ export(life_table_prep)
 export(make_age_bins)
 export(merge_pop_deaths)
 import(dplyr)
-importFrom(rlang,.data)
+importFrom(rlang,
+  ":=",
+  .data
+)
 importFrom(tidyr,
   complete,
   replace_na
